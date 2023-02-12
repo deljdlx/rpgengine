@@ -1,0 +1,97 @@
+.viewport {
+  /* border: solid 4px #f00; */
+  /* position: absolute; */
+  position: relative;
+  /* overflow: hidden; */
+
+
+  -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 98%);
+  mask-image: radial-gradient(circle, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 98%);
+
+}
+
+
+.map {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.map-area {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.map-layer {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.map-layer--ground {
+  z-index: 0;
+}
+
+.map-layer--ground .map-area {
+  background-image: url('../images/map/grass-01.png');
+}
+
+.map-layer--surface {
+
+}
+
+.sprite {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index:10;
+  /* -webkit-box-reflect: below 0 linear-gradient(transparent, white); */
+}
+
+.shadow {
+  position: absolute;
+  background-color: #0006;
+  border-radius: 100%;
+  z-index: 0;
+  transform: skewX(20deg);
+  filter: blur(3px)
+}
+
+
+.character {
+  position: absolute;
+  height: 48px;
+  width: 48px;
+  transform: scale(0.75);
+}
+
+.character-sprite {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.character-shadow {
+  bottom: -6px;
+  left: 12px;
+  width: 24px;
+  height: 12px;
+}
+
+
+
+.map-element {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.map-element.collision {
+  
+}
+
+.element-zone {
+  position: absolute;
+}

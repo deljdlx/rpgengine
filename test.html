@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="assets/css/reset.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Changa:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+
+
+    <link rel="stylesheet" href="assets/css/_variables.css">
+
+    <link rel="stylesheet" href="assets/css/layout.css">
+
+    <link rel="stylesheet" href="assets/css/map.css">
+    <link rel="stylesheet" href="assets/css/map-debug.css">
+
+
+    <style>
+
+
+
+    </style>
+</head>
+<body>
+
+    <div id="layout" style="">
+        <div id="top-bar"  class="frame-00">
+            <h1>DelJdlx garden</h1>
+        </div>
+
+        <div id="main" class="">
+            <div style="width: 300px;" class="frame-00">
+                <label>Debug<input type="checkbox" id="debug-switch"/></label>
+            </div>
+            
+            <div style="position: relative" class="frame-00">
+                <div class="viewport"></div>
+            </div>
+            
+            <div id="right-panel" style="width: 300px;" class="frame-00">
+                <div id="console"></div>
+            </div>
+
+        </div>
+        <div id="bottom-panel" class="frame-00" style="flex-grow: 1">
+            <div id="bottom-panel__content"></div>
+        </div>
+    </div>
+
+    <template id="chat-entry">
+        <div class="chat-entry">
+            <div class="frame-00 chat-entry__avatar-container">
+                <div class="chat-entry__avatar" style="background-image: url(assets/images/characters/face-00.png);"></div>
+            </div>
+            <div class="chat-content"></div>
+        </div>
+    </template>
+
+
+    
+    <script src="assets/js/tools/GameConsole.js"></script>
+
+
+    <script src="assets/js/map/Viewport.js"></script>
+    <script src="assets/js/map/Layer.js"></script>
+
+
+    <script src="assets/js/map/Map.js"></script>
+    
+
+    <script src="assets/js/map/AreaDescriptor.js"></script>
+    
+    <script src="assets/js/map/MapArea.js"></script>
+    
+
+    <script src="assets/js/map/Coordinates.js"></script>
+    <script src="assets/js/map/MapElement.js"></script>
+    <script src="assets/js/map/ElementDescriptor.js"></script>
+
+    <script src="assets/js/map/Zone.js"></script>
+
+
+    <script src="assets/js/map/Elements/Character.js"></script>
+    <script src="assets/js/map/MainCharacter.js"></script>
+
+
+
+    <script src="assets/js/map/Elements/Tree00.js"></script>
+    <script src="assets/js/map/Elements/House00.js"></script>
+
+    <script src="assets/js/map/Elements/Flower.js"></script>
+    <script src="assets/js/map/Elements/Flower00.js"></script>
+    <script src="assets/js/map/Elements/Flower01.js"></script>
+    <script src="assets/js/map/Elements/Flower02.js"></script>
+
+    <script src="assets/js/map/Elements/Ground/GroundConcrete00.js"></script>
+
+    <script src="assets/js/map/Elements/Fountain00.js"></script>
+
+    <script src="assets/js/map/Elements/Sign00.js"></script>
+
+
+    <script src="assets/js/layout/StatusBar.js"></script>
+
+    <script src="assets/js/application.js"></script>
+
+</body>
+</html>
