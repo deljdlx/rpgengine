@@ -19,5 +19,10 @@ class ElementDescriptor
   constructor(element, coordinates) {
     this.element = element;
     this.coordinates = coordinates;
+    this.element.setCoordinates(this.coordinates);
+  }
+
+  getElement() {
+    return this.element;
   }
 }

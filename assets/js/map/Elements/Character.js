@@ -8,11 +8,6 @@ class Character extends MapElement
   spriteSheetOffsetLeft = 0;
   spriteSheetOffsetTop = 0;
 
-  /**
-   * @type {DomElement}
-   */
-  sprite;
-
   spriteWidth = 48;
   spriteHeight = 48;
 
@@ -39,7 +34,7 @@ class Character extends MapElement
       48,
       48,
     );
-
+    
     this.spriteSheet = spriteSheet;
     this.spriteSheetOffsetLeft = spriteSheetOffsetLeft;
     this.spriteSheetOffsetTop = spriteSheetOffsetTop;
@@ -48,8 +43,7 @@ class Character extends MapElement
       new Zone(this, 25, 20, 12, 18)
     );
 
-    this.sprite = document.createElement('div');
-    this.sprite.classList.add('sprite', 'character');
+    this.sprite.classList.add('character');
     this.sprite.style.backgroundImage = `url(${this.spriteSheet})`;
     this.sprite.style.backgroundPosition = `0px ${this.spriteSheetOffsetTop}px`;
     this.dom.appendChild(this.sprite);
@@ -84,16 +78,6 @@ class Character extends MapElement
     clearTimeout(this.moveTimer);
   }
 
-  /*
-  say(sentence) {
-    const event = new Event("say", {
-      detail: {
-        sentence: sentence
-      }
-    });
-    this.dom.dispatchEvent(event);
-  }
-  */
 
   move() {
     if(!this.started) {

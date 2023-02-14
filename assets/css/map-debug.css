@@ -2,6 +2,7 @@ body.debug .map {
   outline: dashed 2px #00f;
 }
 
+
 body.debug .map-layer {
   outline: dashed 1px #ff0;
 }
@@ -15,7 +16,7 @@ body.debug .character {
 }
 
 body.debug .map-element {
-  outline: dashed #f0f4 1px;
+  outline: dashed #0f0 2px;
 }
 
 body.debug .map-element.grid {

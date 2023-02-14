@@ -43,12 +43,60 @@ function getArea00() {
 
   area00.addElement('surface', new House00(), 2, 1);
 
+  // ===========================
+
+  function getHouseGroup00() {
+    const house00Group = new MapElementGroup();
+
+    for(let i = 0; i < 14 ; i++) {
+      house00Group.addElement('surface', new Fence00H(), (16 * i), 24, false);
+    }
+  
+    for(let i = 0; i < 12 ; i++) {
+      house00Group.addElement('surface', new Fence00V(), 2, (24 + 16 * i), false);
+      house00Group.addElement('surface', new Fence00V(), -8 + (14 * 16), (24 + 16 * i), false);
+    }
+  
+    house00Group.addElement('surface', new House00(), 1, 2);
+    house00Group.addElement('surface', new Flower00(), 1.3, 4.5);
+
+    house00Group.addElement('surface', new SunFlower00(), 1.3, 1);
+    house00Group.addElement('surface', new SunFlower00(), 1.5, 1);
+    house00Group.addElement('surface', new SunFlower00(), 1.7, 1);
+
+    house00Group.addElement('surface', new Sign00(), 3.7, 4);
+
+    return house00Group;
+  }
+
+
+  area00.addGroup(getHouseGroup00(), 6, 0);
+  // area00.addGroup(getHouseGroup00(), 11, 0);
+
+  // =========================== 
+
+
+  /*
   area00.addElement('surface', new House00(), 7, 1);
   area00.addElement('surface', new Flower00(), 7.3, 3.5);
   area00.addElement('surface', new Sign00(), 9.5, 3);
 
-  area00.addElement('surface', new Flower00(), 7, 5);
-  area00.addElement('surface', new Flower01(), 6, 5);
+  for(let i = 0; i < 14 ; i++) {
+    area00.addElement('surface', new Fence00H(), (6 * 48 + 16 * i), 24, false);
+  }
+
+  for(let i = 0; i< 8 ; i++) {
+    area00.addElement('surface', new Fence00V(), (6 * 48 + 2), (24 + 16 * i), false);
+    area00.addElement('surface', new Fence00V(), (6 * 48 - 8 + 14 * 16), (24 + 16 * i), false);
+  }
+  */
+  
+  
+
+
+  // area00.addElement('surface', new Flower00(), 7, 5);
+  // area00.addElement('surface', new Flower01(), 6, 5);
+
   area00.addElement('surface', new Flower02(), 2, 5);
 
   area00.addElement('surface', new Fountain00(), 5, 7);

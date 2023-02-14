@@ -16,6 +16,11 @@ class MapElement {
     * @type { DomElement }
     */
   dom;
+
+   /** 
+    * @type { DomElement }
+    */
+  sprite;
   
   /**
    * @type {integer}
@@ -47,6 +52,11 @@ class MapElement {
     this.dom.style.width = this.width + "px";
     this.dom.style.height = this.height + "px";
 
+    this.sprite = document.createElement('div');
+
+    this.sprite.classList.add('sprite');
+
+    this.dom.appendChild(this.sprite);
   }
 
   // ===========================
@@ -74,10 +84,6 @@ class MapElement {
   }
 
   handle(name, data = {}) {
-
-    console.log('%cMapElement.js :: 73 =============================', 'color: #f00; font-size: 1rem');
-    console.log(this);
-
     if(typeof(this.listeners[name]) !== 'undefined') {
       this.listeners[name].map(callback => {
         callback(data);
@@ -110,6 +116,10 @@ class MapElement {
   setCoordinates(coordinates) {
     this.coordinates = coordinates;
     return this;
+  }
+
+  getCoordinates() {
+    return this.coordinates;
   }
 
   /**
