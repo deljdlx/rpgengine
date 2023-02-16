@@ -8,7 +8,10 @@ class House00 extends MapElement
     );
 
     this.addCollisionZone(110, 55, 10, 70);
+  }
 
+  render() {
+    super.render();
     this.sprite = document.createElement('div');
     this.sprite.classList.add('sprite');
     this.sprite.style.backgroundImage = 'url(assets/images/map/map-sprites-02.png)';
@@ -16,7 +19,7 @@ class House00 extends MapElement
     this.sprite.style.zIndex = '10';
     this.dom.appendChild(this.sprite);
 
-    
+
 
 
     this.shadow = document.createElement('div');
@@ -27,8 +30,5 @@ class House00 extends MapElement
     this.shadow.style.bottom = '-3px';
     this.shadow.style.left = '16px';
     this.dom.appendChild(this.shadow);
-
-
-
   }
 }

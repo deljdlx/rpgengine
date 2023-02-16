@@ -19,7 +19,7 @@ class Character extends MapElement
   }
 
   started = false;
-  
+
   animationSleepTime = 50;
   moveSleepTime = 10;
   animationTimer;
@@ -34,14 +34,21 @@ class Character extends MapElement
       48,
       48,
     );
-    
+
     this.spriteSheet = spriteSheet;
     this.spriteSheetOffsetLeft = spriteSheetOffsetLeft;
     this.spriteSheetOffsetTop = spriteSheetOffsetTop;
 
+
     this.collisionZones.push(
       new Zone(this, 25, 20, 12, 18)
     );
+
+
+  }
+
+  render() {
+    super.render();
 
     this.sprite.classList.add('character');
     this.sprite.style.backgroundImage = `url(${this.spriteSheet})`;

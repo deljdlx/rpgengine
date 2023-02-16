@@ -15,7 +15,7 @@ class Viewport {
   x = 0;
   y = 0;
 
-  cellSize = 48;
+  cellSize = 32;
 
   width = 576;
   height = 576;
@@ -27,6 +27,10 @@ class Viewport {
 
   listeners = {};
 
+  areaDescriptors = [];
+
+
+
   constructor(width = 576, height = 576) {
 
     this.width = width;
@@ -35,10 +39,17 @@ class Viewport {
     this.dom = document.querySelector('.viewport');
     this.dom.style.width = this.width + 'px';
     this.dom.style.height = this.height + 'px';
-    
+
     this.addLayer('ground');
     this.addLayer('surface');
     this.initializeMainCharacter();
+  }
+
+
+  render() {
+    this.areaDescriptors.forEach(areaDescriptor => {
+      areaDescriptor.render();
+    });
   }
 
   /**
@@ -57,6 +68,9 @@ class Viewport {
       (48 * 3),
       (48 * 4),
     );
+
+    this.character.render();
+
     this.character.setViewport(this);
     this.dom.appendChild(this.character.dom);
     this.character.coordinates.absolute.x = this.x + this.width / 2;
@@ -72,8 +86,16 @@ class Viewport {
 
   // ===========================
 
-  addArea(areaX, areaY, areaDescriptor) {
+  loadAreaDescriptor(areaX, areaY, areaDescriptor) {
 
+    this.areaDescriptors.push(areaDescriptor);
+    areaDescriptor.getCoordinates().setAbsolute(
+      areaX * this.cellSize,
+      areaY * this.cellSize
+    );
+
+
+    /*
     for(let layerName in areaDescriptor.layers) {
       const layer = this.getLayer(layerName);
       if(layer === false) {
@@ -88,6 +110,7 @@ class Viewport {
         }
       }
     }
+    */
 
     return areaDescriptor;
   }
@@ -151,8 +174,7 @@ class Viewport {
   }
 
   /**
-   * 
-   * @param {String} layerName 
+   * @param {String} layerName
    * @param {*} fixed 
    * @returns {Layer}
    */
@@ -163,11 +185,35 @@ class Viewport {
 
 
   detectCollision(sourceElement) {
+
     let hasCollision = false;
 
     if(!sourceElement) {
       sourceElement = this.character;
     }
+
+    this.areaDescriptors.forEach(areaDescriptor => {
+      const areaBoundingBox = areaDescriptor.getBoundingBox();
+
+      const areaCollided = sourceElement.isCollided({
+        x0: areaBoundingBox.x0 + areaDescriptor.getCoordinates().absolute.x,
+        x1: areaBoundingBox.x1 + areaDescriptor.getCoordinates().absolute.x,
+        y0: areaBoundingBox.y0 + areaDescriptor.getCoordinates().absolute.y,
+        y1: areaBoundingBox.y1 + areaDescriptor.getCoordinates().absolute.y,
+      });
+
+      if(areaCollided) {
+        console.log('%cViewport.js :: 193 =============================', 'color: #f00; font-size: 1rem');
+        console.log("COLLISION");
+        areaDescriptor.getGroups().forEach(group => {
+          const groupBoundingBox = group.getBoundingBox();
+          // console.log('%cViewport.js :: 195 =============================', 'color: #f00; font-size: 1rem');
+          // console.log(groupBoundingBox);
+        })
+      }
+    });
+
+    return false;
 
 
     for(let layerName in this.layers) {
@@ -192,7 +238,7 @@ class Viewport {
           }
 
           area.getElements().forEach((elementDescriptor) => {
-            
+
             if(hasCollision) {
               return true;
             }
@@ -215,11 +261,11 @@ class Viewport {
                   withMainCharacter: true,
                 });
                 */
-  
+
                 return true;
               }
             }
-           
+
             if(sourceElement.isCollided(elementDescriptor)) {
               hasCollision = true;
               /*
@@ -309,10 +355,12 @@ class Viewport {
       map.loadAreasAround(currentArea.x, currentArea.y);
     }
 
+
     this.getCurrentElements().map(elementDescriptor => {
       const element = elementDescriptor.element;
       element.update();
     })
+
 
     setTimeout(() => {
       this.update();

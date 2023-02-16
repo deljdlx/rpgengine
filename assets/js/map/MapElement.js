@@ -1,10 +1,15 @@
 
 class MapElement {
 
-   /** 
+   /**
     * @type { MapArea }
     */
   mapArea;
+
+  /**
+   * @type {boolean}
+   */
+  animated = false;
 
 
   /**
@@ -12,16 +17,16 @@ class MapElement {
    */
   coordinates = {};
 
-   /** 
+   /**
     * @type { DomElement }
     */
   dom;
 
-   /** 
+   /**
     * @type { DomElement }
     */
   sprite;
-  
+
   /**
    * @type {integer}
    */
@@ -37,15 +42,35 @@ class MapElement {
    */
   collisionZones = [];
 
+  /**
+   * @type {boolean}
+   */
+  collided = false;
+
   listeners = {};
 
-  collided = false;
+
+  boundingBox = {
+    x0: null,
+    y0: null,
+    x1: null,
+    y1: null,
+  }
+
+
+  /**
+   * @type {MapElementGroup|null}
+   */
+  group;
 
   constructor(width, height) {
     this.coordinates = new Coordinates();
 
     this.width = width;
     this.height = height;
+  }
+
+  render() {
 
     this.dom = document.createElement('div');
     this.dom.classList.add('map-element');
@@ -53,10 +78,29 @@ class MapElement {
     this.dom.style.height = this.height + "px";
 
     this.sprite = document.createElement('div');
-
     this.sprite.classList.add('sprite');
-
     this.dom.appendChild(this.sprite);
+
+    console.log('%cMapElement.js :: 85 =============================', 'color: #f00; font-size: 1rem');
+    console.log(this.dom);
+  }
+
+  // ===========================
+  /**
+   * @param {MapElementGroup} group
+   * @returns {MapElementGroup}
+   */
+  setGroup(group) {
+    this.group = group;
+    return group;
+  }
+
+
+  /**
+   * @returns {MapElementGroup|null}
+   */
+  getGroup() {
+    return this.group;
   }
 
   // ===========================
@@ -110,8 +154,8 @@ class MapElement {
   }
 
   /**
-   * @param {Coordinates} coordinates 
-   * @returns 
+   * @param {Coordinates} coordinates
+   * @returns
    */
   setCoordinates(coordinates) {
     this.coordinates = coordinates;
@@ -142,26 +186,109 @@ class MapElement {
   }
 
 
-  addCollisionZone(width, height, left, top)
+  addCollisionZone(width, height, x, y)
   {
-    const zone = new Zone(this, width, height, left, top);
+    const zone = new Zone(this, width, height, x, y);
     this.collisionZones.push(zone);
 
-    this.dom.appendChild(zone.dom);
+
+
+    if(x < this.boundingBox.x0 || this.boundingBox.x0 === null) {
+      this.boundingBox.x0 = x;
+    }
+    if(x + width > this.boundingBox.x1 || this.boundingBox.x1 === null) {
+      this.boundingBox.x1 = x + width;
+    }
+
+    if(y < this.boundingBox.y0 || this.boundingBox.y0 === null) {
+      this.boundingBox.y0 = y;
+    }
+    if(y + height > this.boundingBox.y1 || this.boundingBox.y1 === null) {
+      this.boundingBox.y1 = y + height;
+    }
+
+
+    if(zone.dom) {
+      this.dom.appendChild(zone.dom);
+    }
   }
 
+  getBoundingBox() {
+    return this.boundingBox;
+  }
 
   getCollisionZones() {
     return this.collisionZones;
   }
 
+  isAnimated() {
+    return this.animated;
+  }
 
-  isCollided(elementDescriptor) {
+  isCollided(boundingBox) {
+
+    let hasCollision = false;
+
+    console.log('%cMapElement.js :: 200 =============================', 'color: #f00; font-size: 1rem');
+    console.log(boundingBox);
+
+    hasCollision = this.collisionZones.reduce((collided, zone) => {
+      const collisionLeft = boundingBox.x0 < zone.x + zone.width + this.coordinates.absolute.x;
+      const collisionRight = boundingBox.x1 > zone.x + this.coordinates.absolute.x;
+      const collisionTop = boundingBox.y0 < zone.y + zone.height + this.coordinates.absolute.y;
+      const collisionBottom = boundingBox.y1 > zone.y + this.coordinates.absolute.y;
+
+      return collisionLeft && collisionRight && collisionTop && collisionBottom
+    }, false);
+
+    this.collided = hasCollision;
+    return hasCollision;
+
+
+    /*
+    if(hasCollision) {
+      this.handle('collision', {
+        source: this,
+        target: element,
+      });
+
+      element.handle('collision', {
+        source: element,
+        target: this,
+      })
+    }
+
+    if(this.collided && !hasCollision) {
+      this.handle('endCollision', {
+        source: this,
+        target: element,
+      });
+      this.handle('endCollision', {
+        source: element,
+        target: this,
+      });
+    }
+    */
+
+    this.collided = hasCollision;
+
+    return hasCollision;
+
+
+
+  }
+
+
+  isCollided2(elementDescriptor) {
 
     let hasCollision = false;
 
     const element = elementDescriptor.element;
     const elementCoordinates = elementDescriptor.coordinates.absolute;
+
+    if(!element.isAnimated() && !this.isAnimated()) {
+      return false;
+    }
 
     const zones = element.getCollisionZones();
 
@@ -219,7 +346,11 @@ class MapElement {
 
   update() {
     const offsets = this.getOffsets();
-    this.dom.style.zIndex = offsets.top + this.height;
+    if(parseInt(offsets.top + this.height) != parseInt(this.dom.style.zIndex)) {
+      setTimeout(() => {
+        this.dom.style.zIndex = offsets.top + this.height;
+      }, 1)
+    }
   }
 
   getOffsets() {

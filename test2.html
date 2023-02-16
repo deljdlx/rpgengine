@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="assets/css/reset.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Changa:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+
+
+    <link rel="stylesheet" href="assets/css/_variables.css">
+
+    <link rel="stylesheet" href="assets/css/layout.css">
+
+    <link rel="stylesheet" href="assets/css/map.css">
+    <link rel="stylesheet" href="assets/css/map-debug.css">
+
+
+    <style>
+
+        #viewport {
+            position: absolute;
+            border: solid 10px #ccc;
+            overflow: hidden;
+            transition: all 5ms linear;
+        }
+
+        .map-element {
+            position: absolute;
+        }
+
+        .map-element__bounding-box {
+            position: absolute;
+            outline: dotted #f0f 1px;
+            height: 100%;
+            width: 100%;
+        }
+
+        .map-element__collision-bounding-box {
+            position: absolute;
+            outline: dotted #ff0 1px;
+        }
+
+        .map-element__collision-zone {
+            position: absolute;
+            /*outline: solid #ff0 1px;*/
+            background-color: #ff08;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="viewport"></div>
+
+
+    <!-- ==================================== -->
+    <template id="chat-entry">
+        <div class="chat-entry">
+            <div class="frame-00 chat-entry__avatar-container">
+                <div class="chat-entry__avatar" style="background-image: url(assets/images/characters/face-00.png);"></div>
+            </div>
+            <div class="chat-content"></div>
+        </div>
+    </template>
+
+    <!-- ==================================== -->
+
+    <script src="assets/js/map2/Layer.js"></script>
+    <script src="assets/js/map2/Coordinates.js"></script>
+    <script src="assets/js/map2/Geometry.js"></script>
+    <script src="assets/js/map2/BoundingBox.js"></script>
+    <script src="assets/js/map2/Element.js"></script>
+    <script src="assets/js/map2/Board.js"></script>
+    <script src="assets/js/map2/Renderer.js"></script>
+
+    <script src="assets/js/map2/Viewport.js"></script>
+    <script src="assets/js/map2/ViewportRenderer.js"></script>
+
+
+    <script src="assets/js/map2/Character.js"></script>
+
+
+
+
+    <script src="assets/js/bootstrap.js"></script>
+
+
+
+
+</body>
+</html>

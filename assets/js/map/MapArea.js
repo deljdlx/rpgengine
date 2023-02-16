@@ -74,10 +74,10 @@ class MapArea {
   }
 
   /**
-   * 
-   * @param {MapElement} element 
-   * @param {float} x 
-   * @param {float} y 
+   *
+   * @param {MapElement} element
+   * @param {float} x
+   * @param {float} y
    * @returns {MapElement}
    */
   addElement(element, x , y) {
@@ -110,46 +110,15 @@ class MapArea {
       left,
       top,
     );
-    
+
     if(register) {
       this.elements.push(element);
     }
-    
+
+
+    element.render();
+
     this.dom.appendChild(element.dom);
     return element;
-  }
-
-
-  addHorizontalRoad(left, top, size) {
-    
-    for(let i = 0; i< size; i++) {
-      
-      let x = left + i * 48;
-
-      const r0 = this.createElement(48, 48, x, top,);
-      r0.dom.style.backgroundImage = 'url(assets/images/map-sprites-00.png)';
-      r0.dom.style.backgroundPosition = `${48 * -8}px ${48 * -3}px`;
-
-      const r1 = this.createElement(48, 48, x, top + 48,);
-      r1.dom.style.backgroundImage = 'url(assets/images/map-sprites-00.png)';
-      r1.dom.style.backgroundPosition = `${48 * -8}px ${48 * -1}px`;
-    }
-  }
-
-  addVerticalRoad(left, top, size) {
-    
-    for(let i = 0; i< size; i++) {
-      
-      let x = left;
-      let y = top + i * 48;
-
-      const r0 = this.createElement(48, 48, x, y,);
-      r0.dom.style.backgroundImage = 'url(assets/images/map-sprites-00.png)';
-      r0.dom.style.backgroundPosition = `${48 * -5}px ${48 * -3}px`;
-
-      const r1 = this.createElement(48, 48, x + 48, y);
-      r1.dom.style.backgroundImage = 'url(assets/images/map-sprites-00.png)';
-      r1.dom.style.backgroundPosition = `${48 * -3}px ${48 * -3}px`;
-    }
   }
 }
