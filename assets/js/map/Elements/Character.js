@@ -35,6 +35,8 @@ class Character extends MapElement
       48,
     );
 
+    this.createCollisionZone(0, 0, 16, 16);
+
     this.spriteSheet = spriteSheet;
     this.spriteSheetOffsetLeft = spriteSheetOffsetLeft;
     this.spriteSheetOffsetTop = spriteSheetOffsetTop;

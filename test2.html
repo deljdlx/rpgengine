@@ -28,12 +28,18 @@
         #viewport {
             position: absolute;
             border: solid 10px #ccc;
-            overflow: hidden;
+            /* overflow: hidden; */
             transition: all 5ms linear;
+            top: 100px;
+            left: 200px;
         }
 
         .map-element {
             position: absolute;
+        }
+
+        .map-element.collided {
+            background-color: #0ff8;
         }
 
         .map-element__bounding-box {
@@ -41,6 +47,8 @@
             outline: dotted #f0f 1px;
             height: 100%;
             width: 100%;
+
+            background-color: #fff4;
         }
 
         .map-element__collision-bounding-box {
@@ -52,6 +60,22 @@
             position: absolute;
             /*outline: solid #ff0 1px;*/
             background-color: #ff08;
+        }
+
+        .map-element__collision-zone.collided {
+            position: absolute;
+            /*outline: solid #ff0 1px;*/
+            background-color: #f0f;
+        }
+
+        .map-element__collision-zone.debug {
+            position: absolute;
+            outline: solid #ff0 10px;
+        }
+
+        .map-area {
+            position: absolute;
+            outline: dotted #f0f 1px;
         }
 
     </style>
@@ -79,13 +103,28 @@
     <script src="assets/js/map2/BoundingBox.js"></script>
     <script src="assets/js/map2/Element.js"></script>
     <script src="assets/js/map2/Board.js"></script>
-    <script src="assets/js/map2/Renderer.js"></script>
-
+    <script src="assets/js/map2/Area.js"></script>
+    
     <script src="assets/js/map2/Viewport.js"></script>
-    <script src="assets/js/map2/ViewportRenderer.js"></script>
 
+
+    <script src="assets/js/map2/Renderer.js"></script>
+    <script src="assets/js/map2/BoardRenderer.js"></script>
+    <script src="assets/js/map2/AreaRenderer.js"></script>
+    <script src="assets/js/map2/ViewportRenderer.js"></script>
+    <script src="assets/js/map2/CharacterRenderer.js"></script>
 
     <script src="assets/js/map2/Character.js"></script>
+
+    <script src="assets/js/map2/Elements/House00.js"></script>
+    <script src="assets/js/map2/Elements/House01.js"></script>
+
+    
+    <script src="assets/js/map2/Elements/Tree00.js"></script>
+    <script src="assets/js/map2/Elements/Sunflower00.js"></script>
+    <script src="assets/js/map2/Elements/Fence00H.js"></script>
+    <script src="assets/js/map2/Elements/Fence00V.js"></script>
+
 
 
 

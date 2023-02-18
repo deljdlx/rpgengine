@@ -18,20 +18,32 @@ class Geometry
     this._coordinates = new Coordinates();
   }
 
+  /**
+   * @returns {Geometry}
+   */
+  clone() {
+    const cloned = new Geometry();
+    cloned.x(this.x());
+    cloned.y(this.y());
+    cloned.width(this.width());
+    cloned.height(this.height());
+    return cloned;
+  }
+
   coordinates() {
     return this._coordinates;
   }
 
   width(value = null) {
     if(value !== null) {
-      this._width = value;
+      this._width = Math.round(value);
     }
     return this._width;
   }
 
   height(value = null) {
     if(value !== null) {
-      this._height = value;
+      this._height = Math.round(value);
     }
     return this._height;
   }

@@ -1,5 +1,87 @@
 class Board extends Element
 {
+  areas = {};
 
+  constructor(width = null, height = null) {
+    super(0, 0, width, height);
+
+    this.renderer = new BoardRenderer(this);
+
+    // this.createAreaAt(0, 0);
+
+    for(let x = -1 ; x < 2 ; x++) {
+      for(let y = -1 ; y < 2 ; y++) {
+        this.createAreaAt(x, y);
+      }
+    }
+
+  }
+
+  loadArea(x, y) {
+    if(!this.areaExistsAt(x, y)) {
+      const area = this.createAreaAt(x, y);
+      this.getRenderer().update();
+      return area;
+    }
+
+    return this.areas[x][y];
+  }
+
+  getAreaAt(x, y) {
+    if(!this.areaExistsAt(x, y)) {
+      this.loadArea(x, y);
+    }
+
+    return this.areas[x][y];
+  }
+
+  freeArea(x, y) {
+    if(!this.areaExistsAt(x, y)) {
+      return false;
+    }
+    const area = this.areas[x][y];
+    area.getRenderer().clear();
+    delete this.areas[x][y];
+
+
+    return area;
+
+  }
+  
+  areaExistsAt(x, y) {
+    if(typeof(this.areas[x]) === 'undefined') {
+      return false;
+    }
+    if(typeof(this.areas[x][y]) === 'undefined') {
+      return false;
+    }
+    return true;
+  }
+
+  createAreaAt(x, y) {
+    if(typeof(this.areas[x]) === 'undefined') {
+      this.areas[x] = {};
+    }
+    if(typeof(this.areas[x][y]) === 'undefined') {
+      this.areas[x][y] = {};
+    }
+    // this.areas[x][y] = new Area(this, x * this.width(), y * this.height());
+    const area = new Area(this, 0 , 0);
+    this.areas[x][y] = area;
+
+    // console.log('%cBoard.js :: 73 =============================', 'color: #f00; font-size: 1rem');
+    // console.log(this.collisionBoundingBox);
+
+    this.addElement(x * this.width(), y * this.height(), area);
+
+    // console.log(this.collisionBoundingBox);
+
+
+    return this.areas[x][y];
+  }
+
+  getAreas() {
+    return this.areas;
+  }
 }
 

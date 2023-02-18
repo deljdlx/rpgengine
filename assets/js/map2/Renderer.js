@@ -14,6 +14,16 @@ class Renderer
   /**
    * @type {DomElement}
    */
+  domShadow;
+
+  /**
+   * @type {DomElement}
+   */
+  domSprite;
+
+  /**
+   * @type {DomElement}
+   */
   childDom;
 
   /**
@@ -26,32 +36,41 @@ class Renderer
    */
   boundingBox;
 
+  /**
+   * 
+   * @param {Element} element 
+   */
   constructor(element) {
     this._element = element;
+    this.dom = document.createElement('div');
+    this.dom.classList.add('map-element');
   }
 
   /**
-   * @type {Element}
+   * @param {Element|null} referenceElement 
    * @returns {DomElement}
    */
   render() {
-    if(this.dom) {
-      return this.dom;
-    }
 
-    this.dom = document.createElement('div');
-    this.dom.classList.add('map-element');
+    const relativeTo = this._element.relativeTo();
 
     this.dom.style.width = this._element.width() + 'px';
     this.dom.style.height = this._element.height() + 'px';
 
-    this.dom.style.left = this._element.x() + 'px';
-    this.dom.style.top = this._element.y() + 'px';
+    let left = this._element.x();
+    let top = this._element.y();
+
+    if(relativeTo) {
+      left += relativeTo.x();
+      top += relativeTo.y();
+    }
+
+    this.dom.style.left = left + 'px';
+    this.dom.style.top = top + 'px';
+    this.dom.style.zIndex = this._element.y() + this._element.height();
 
     this.childDom = document.createElement('div');
     this.dom.appendChild(this.childDom);
-
-    this.renderBoundingBox(this._element);
 
     this._element.getChildren().forEach(element => {
       this.childDom.appendChild(element.render());
@@ -60,19 +79,42 @@ class Renderer
     return this.dom;
   }
 
+  update() {
+
+    if(this._element.collided()) {
+      this.dom.classList.add('collided');
+    }
+    else {
+      this.dom.classList.remove('collided');
+    }
+  }
+
   getDom() {
     return this.dom;
   }
 
+  clear() {
+    this.dom.remove();
+  }
 
-  renderBoundingBox(element) {
+  getElement() {
+    return this._element;
+  }
+
+
+  renderBoundingBox() {
     this.boundingBox = document.createElement('div');
     this.boundingBox.classList.add('map-element__bounding-box');
     this.dom.append(this.boundingBox);
   }
 
-  renderCollisionZones(element) {
+  renderCollisionZones() {
 
+    const element = this._element;
+
+    if(this.collisiondDom) {
+      return this.collisiondDom;
+    }
     this.collisiondDom = document.createElement('div');
     this.collisiondDom.classList.add('map-element__collision-bounding-box');
     this.collisiondDom.style.left = element.getCollisionBoundingBox().x0() + 'px';
@@ -80,19 +122,23 @@ class Renderer
     this.collisiondDom.style.width = element.getCollisionBoundingBox().width() + 'px';
     this.collisiondDom.style.height = element.getCollisionBoundingBox().height() + 'px';
 
-
     if(this.dom) {
       this.dom.appendChild(this.collisiondDom);
     }
 
-    element.getCollisionZones().forEach(collisionElement => {
+    element.getCollisionZones().forEach(boundingBox => {
       const collisionDom = document.createElement('div');
       collisionDom.classList.add('map-element__collision-zone');
-      collisionDom.style.width = collisionElement.width() + 'px';
-      collisionDom.style.height = collisionElement.height() + 'px';
-      collisionDom.style.left = collisionElement.x() - element.getCollisionBoundingBox().x0() + 'px';
-      collisionDom.style.top = collisionElement.y() - element.getCollisionBoundingBox().y0() + 'px';
-      this.collisiondDom.append(collisionDom);
+      collisionDom.style.width = boundingBox.width() + 'px';
+      collisionDom.style.height = boundingBox.height() + 'px';
+      collisionDom.style.left = boundingBox.x0() + 'px';
+      collisionDom.style.top = boundingBox.y0() + 'px';
+
+      boundingBox.dom = collisionDom;
+
+      if(this.dom) {
+        this.dom.appendChild(collisionDom);
+      }
     });
 
     element.getChildren().forEach(element => {
@@ -101,6 +147,5 @@ class Renderer
 
     return this.collisiondDom;
   }
-
 }
 

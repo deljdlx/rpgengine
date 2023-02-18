@@ -11,36 +11,48 @@ class BoundingBox
   _y0 = null;
   _y1 = null;
 
+  _collided = false;
+
   /**
-   * @param {Element} element
+   * @param {Element|null} element
    */
-  constructor(element) {
-    this._element = element
+  constructor(element = null) {
+    if(element) {
+      this._element = element
+    }
+  }
+
+  collided(value = null) {
+    if(value !== null) {
+      this._collided = value;
+    }
+
+    return this._collided;
   }
 
   /**
-   * @param {Element} element
-   * @returns {Element}
+   * @param {BoundingBox} element
+   * @returns {BoundingBox}
    */
-  updateWithElement(element) {
+  updateWithBoundingBox(boundingBox) {
 
-    if(this.x0() === null || element.x() < this.x0()) {
-      this.x0(element.x());
+    if(this.x0() === null || boundingBox.x0() < this.x0()) {
+      this.x0(boundingBox.x0());
     }
 
-    if(this.x1() === null || element.x() + element.width() > this.x1()) {
-      this.x1(element.x() + element.width());
+    if(this.x1() === null ||boundingBox.x1() > this.x1()) {
+      this.x1(boundingBox.x1());
     }
 
-    if(this.y0() === null || element.y() < this.y0()) {
-      this.y0(element.y());
+    if(this.y0() === null || boundingBox.y0() < this.y0()) {
+      this.y0(boundingBox.y0());
     }
 
-    if(this.y1() === null || element.y() + element.height() > this.y1()) {
-      this.y1(element.y() + element.height());
+    if(this.y1() === null || boundingBox.y1() > this.y1()) {
+      this.y1(boundingBox.y1());
     }
 
-    return element
+    return this
   }
 
   /**
@@ -49,8 +61,10 @@ class BoundingBox
    */
   updateWithRelativeElement(parentElement, childElement) {
     if(
-      parentElement.getCollisionBoundingBox().x1() <
+      (parentElement.getCollisionBoundingBox().x1() <
       childElement.getCollisionBoundingBox().x1() + childElement.x()
+      || parentElement.getCollisionBoundingBox().x1() === null)
+      && childElement.getCollisionBoundingBox().x1() !== null 
     ) {
       parentElement.getCollisionBoundingBox().x1(
         childElement.getCollisionBoundingBox().x1() + childElement.x()
@@ -58,8 +72,10 @@ class BoundingBox
     }
 
     if(
-      parentElement.getCollisionBoundingBox().x0() >
+      (parentElement.getCollisionBoundingBox().x0() >
       childElement.getCollisionBoundingBox().x0() + childElement.x()
+      || parentElement.getCollisionBoundingBox().x0() === null)
+      && childElement.getCollisionBoundingBox().x0() !== null
     ) {
       parentElement.getCollisionBoundingBox().x0(
         childElement.getCollisionBoundingBox().x0() + childElement.x()
@@ -67,8 +83,10 @@ class BoundingBox
     }
 
     if(
-      parentElement.getCollisionBoundingBox().y1() <
+      (parentElement.getCollisionBoundingBox().y1() <
       childElement.getCollisionBoundingBox().y1() + childElement.y()
+      || parentElement.getCollisionBoundingBox().y1() === null)
+      && childElement.getCollisionBoundingBox().y1() !== null
     ) {
       parentElement.getCollisionBoundingBox().y1(
         childElement.getCollisionBoundingBox().y1() + childElement.y()
@@ -76,8 +94,10 @@ class BoundingBox
     }
 
     if(
-      parentElement.getCollisionBoundingBox().y0() >
+      (parentElement.getCollisionBoundingBox().y0() >
       childElement.getCollisionBoundingBox().y0() + childElement.y()
+      || parentElement.getCollisionBoundingBox().y0() === null)
+      && childElement.getCollisionBoundingBox().y0() !== null
     ) {
       parentElement.getCollisionBoundingBox().y0(
         childElement.getCollisionBoundingBox().y0() + childElement.y()
@@ -91,6 +111,10 @@ class BoundingBox
    * @param {BoudingBox} boudingBox
    */
   isCollided(boundingBox) {
+    if(this.isUndefined() || boundingBox.isUndefined()) {
+      return false;
+    }
+
     return (
       this.offsetX0() <= boundingBox.offsetX1()
       && this.offsetX1() >= boundingBox.offsetX0()
@@ -99,7 +123,20 @@ class BoundingBox
     );
   }
 
+  isUndefined() {
+    return this._x0 === null || this._x1 === null || this._y0 === null || this._y1 === null;
+  }
+
   // ===========================
+
+  offsets() {
+    return {
+      x0: this.offsetX0(),
+      x1: this.offsetX1(),
+      y0: this.offsetY0(),
+      y1: this.offsetY1(),
+    }
+  }
 
   offsetX0() {
     return this.x0() + this._element.offsetX();
@@ -146,11 +183,17 @@ class BoundingBox
     return this._y1;
   }
 
-  width() {
+  width(value = null) {
+    if(value !== null) {
+      this._x1 = this.x0() + value;
+    }
     return this._x1 - this._x0;
   }
 
-  height() {
+  height(value = null) {
+    if(value) {
+      this._y1 = this.y0() + value;
+    }
     return this._y1 - this._y0;
   }
 

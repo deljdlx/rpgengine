@@ -21,14 +21,14 @@ class Coordinates
 
   x(value = null) {
     if(value !== null) {
-      this._x = value;
+      this._x = Math.round(value);
     }
     return this._x;
   }
 
   y(value = null) {
     if(value !== null) {
-      this._y = value;
+      this._y = Math.round(value);
     }
     return this._y;
   }

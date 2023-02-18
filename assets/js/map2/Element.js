@@ -7,6 +7,12 @@ class Element
   boundingBox;
 
   /**
+   * @type {Boolean}
+   */
+  _collided;
+
+
+  /**
    * @type {BoundingBox}
    */
    collisionBoundingBox;
@@ -38,6 +44,16 @@ class Element
    */
   collisionZones = [];
 
+
+  /**
+   * @type {Boolean}
+   */
+  _needUpdate = false;
+
+  rendered = false;
+
+  _relativeTo = null;
+
   constructor(x = null, y = null, width = null, height = null)
   {
     this.geometry = new Geometry();
@@ -45,12 +61,22 @@ class Element
     this.collisionBoundingBox = new BoundingBox(this);
 
     this.renderer = new Renderer(this);
+    this.dom = this.renderer.getDom();
 
     this.x(x);
     this.y(y);
     this.width(width);
     this.height(height);
   }
+
+  relativeTo(element = null) {
+    if(element !== null) {
+      this._relativeTo = element;
+    }
+    
+    return this._relativeTo;
+  }
+
 
   width(value = null) {
     return this.geometry.width(value);
@@ -91,11 +117,33 @@ class Element
     return element;
   }
 
+  addElement(x = 0, y = 0, element) {
+
+    this.children.push(element);
+    element.setParent(this);
+    element.x(x);
+    element.y(y);
+
+    this.updateCollisionBoundingBox(element);
+    
+    if(this.parent) {
+      this.parent.updateCollisionBoundingBox(this);
+    }
+
+    this.needUpdate(true);
+    return element;
+  }
+
   createCollisionZone(x = null, y = null, width = null, height = null) {
-    const zone = new Element(x, y, width, height);
-    zone.setParent(this);
+
+    const zone = new BoundingBox(this);
+    zone.x0(x);
+    zone.y0(y);
+    zone.width(width);
+    zone.height(height);
     this.collisionZones.push(zone);
-    this.collisionBoundingBox.updateWithElement(zone);
+
+    this.collisionBoundingBox.updateWithBoundingBox(zone);
 
     if(this.parent) {
       this.parent.updateCollisionBoundingBox(this);
@@ -114,35 +162,116 @@ class Element
     }
   }
 
+  // =========================== 
+  needUpdate(value = null) {
+    if(value !== null) {
+      this._needUpdate = value;
+      if(this.parent) {
+        this.parent.needUpdate(value);
+      }
+    }
+
+    return this._needUpdate;
+  }
+
+
+  // =========================== 
+
+  collided(value = null) {
+
+    if(value !== null) {
+      if(value !== this._collided) {
+        this._collided = value;
+        if(value === false) {
+          this.collisionZones.forEach(zone => {
+            zone.collided(false);
+          });
+        }
+
+        if(this.parent) {
+          this.parent.collided(value);
+        }
+        this.needUpdate(true);
+      }
+    }
+
+    return this._collided;
+  }
+
   getCollision(element) {
+
     if(element === this) {
       return false;
     }
 
-    console.log('%cElement.js :: 122 =============================', 'color: #f00; font-size: 1rem');
-    console.log(this.getCollisionBoundingBox());
-
-    const collided = this.getCollisionBoundingBox().isCollided(
+   
+    const boundingBoxCollided = this.getCollisionBoundingBox().isCollided(
       element.getCollisionBoundingBox()
     );
 
-    if(collided) {
-      if(!element.getChildren().length) {
+    if(boundingBoxCollided) {
+
+      const collided = element.collisionZones.reduce((collided, zone) => {
+
+        const isCollided = this.getCollisionBoundingBox().isCollided(zone);
+        if(!collided) {
+          collided = isCollided;
+        }
+        zone.collided(isCollided);
+
+        return collided
+      }, false);
+
+      if(collided) {
+        element.collided(true);
+        this.collided(true);
         return [element];
       }
 
+
       const childCollisions = element.getChildren().map(child => {
-        return this.getCollision(child);
+        const result = this.getCollision(child);
+
+        return result;
       }).filter(Boolean).reduce((accumulator, element) => element, []);
 
-      if(!childCollisions.length) {
-        return [element]
+      if(childCollisions.length) {
+        return childCollisions;
       }
-
-      return childCollisions;
     }
 
+    element.clearCollision();
+    this.clearCollision();
+
     return false;
+  }
+
+  clearCollision() {
+    this.collided(false);
+    this.getCollisionZones().forEach(zone => {
+      if(zone.dom) {
+        zone.collided(false);
+      }
+
+    });
+    this.getChildren().forEach(child => {
+      child.clearCollision();
+    });
+  }
+
+  // ===========================
+
+  update() {
+    if(this.needUpdate()) {
+      this.getRenderer().update();
+
+      this.getChildren().forEach(element => {
+        element.update();
+      });
+
+    }
+
+    this.needUpdate(false);
   }
 
   /**
@@ -180,11 +309,30 @@ class Element
     return this.renderer;
   }
 
+  /**
+   * @returns {Boolean}
+   */
+  isRendered() {
+    return this.redered;
+  }
+
+  /**
+   * @returns 
+   */
   render() {
-    return this.renderer.render(this);
+    this.rendered = true;
+    return this.renderer.render();
+  }
+
+  renderBoundingBox() {
+    this.renderer.renderBoundingBox();
+
+    this.getChildren().forEach(element => {
+      element.renderBoundingBox()
+    });
   }
 
   renderCollisionZones() {
-    return this.renderer.renderCollisionZones(this);
+    return this.renderer.renderCollisionZones();
   }
 }

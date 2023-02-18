@@ -33,18 +33,46 @@ class ViewportRenderer
     this._container.style.height = this._viewport.getGeometry().height() + 'px';
     this._container.append(this._viewport.getBoard().render());
 
+
     this.domCharacter = this._viewport.getCharacter().getRenderer().render();
+    this._viewport.getBoard().getRenderer().getDom().append(this.domCharacter);
+    
+    this.renderDebug();
+    
+  }
 
-    this._container.append(this.domCharacter);
-
-    this.domCharacter.style.backgroundColor = '#fff';
-
+  renderDebug() {
+    this._board.getRenderer().renderDebug();
+    this._viewport.getCharacter().getRenderer().renderCollisionZones();
   }
 
   update(){
     const left = -this._viewport.x();
     const top = -this._viewport.y();
+    
+    const at = this._viewport.getCurrentAreaCoordinates();
 
-    this._board.getRenderer().getDom().style.transform = `translateX(${left}px) translateY(${top}px)`
+    const zIndex =
+      (
+        this._viewport.height() +
+        (
+          this._viewport.getCharacter().y() % this._viewport.height()
+        )
+      ) % this._viewport.height()
+      + this._viewport.getCharacter().height()
+    ;
+    
+    this._viewport.getCharacter().getRenderer().getDom().style.zIndex = zIndex;
+
+
+    const characterTop = -top;
+    const characterLeft = -left;
+
+    this._viewport.getCharacter().getRenderer().getDom().style.transform =
+      `translateX(${characterLeft}px) translateY(${characterTop}px) scale(0.75)`;
+    
+
+    this._board.getRenderer().getDom().style.transform = `translateX(${left}px) translateY(${top}px)`;
+
   }
 }
