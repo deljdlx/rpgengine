@@ -1,14 +1,14 @@
-class Sunflower00 extends Element
+class Ground00 extends Element
 {
   constructor() {
-    super(0, 0 , 16, 24)
+    super(0, 0 , 50, 48);
+    this.manualZ = true;
   }
 
   render() {
     const dom = super.render();
-    this.getRenderer().addShadow();
     this.getRenderer().getSprite().style.backgroundImage = 'url(assets/images/map/map-sprites-01.png)';
-    this.getRenderer().getSprite().style.backgroundPosition = `-1760px -1256px`;
+    this.getRenderer().getSprite().style.backgroundPosition = `-1790px -800px`;
     return dom;
   }
 }

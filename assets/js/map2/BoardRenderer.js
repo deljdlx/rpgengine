@@ -37,7 +37,7 @@ class BoardRenderer extends Renderer
           area.renderCollisionZones();
 
           // area.renderBoundingBox();
-          
+
         }
       }
     } 
@@ -53,10 +53,21 @@ class BoardRenderer extends Renderer
 
           this.dom.append(area.render());
 
+          // const areaElements = area.getChildren();
+          // areaElements.forEach(element => {
+          //   element.relativeTo(area);
+          //   this.dom.append(element.render());
+          // });
+
           const areaElements = area.getChildren();
           areaElements.forEach(element => {
             element.relativeTo(area);
             this.dom.append(element.render());
+            element.getAllChildren().forEach(child => {
+              console.log('%cBoardRenderer.js :: 62 =============================', 'color: #f00; font-size: 1rem');
+              console.log(child.render());
+              this.dom.append(child.render());
+            })
           });
         }
       }

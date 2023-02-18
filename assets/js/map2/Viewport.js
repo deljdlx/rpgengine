@@ -66,7 +66,7 @@ class Viewport
 
   getCurrentAreaCoordinates() {
     const x = Math.floor(this.character.x() / this.board.width());
-    const y = Math.floor(this.character.y() / this.board.height());
+    const y = Math.floor((this.character.y() + 48) / this.board.height());
     return {
       x: x,
       y: y

@@ -14,10 +14,14 @@ class CharacterRenderer extends Renderer
   constructor(element) {
     super(element);
     this.dom.classList.add('character');
-    this.dom.style.backgroundImage = `url('assets/images/characters/characters-00.png')`;
-    // this.dom.style.backgroundPosition = `0px ${this.spriteSheetOffsetTop}px`;
+    this.domSprite.style.backgroundImage = `url('assets/images/characters/characters-00.png')`;
+    
+    const left = -this.getElement().width() - this.getElement().getSpriteSheetOffsetLeft();
 
-    this.dom.style.backgroundPosition = `0px 0px`;
+    const top = this.spriteDirectionOffsets['down'] - this.getElement().getSpriteSheetOffsetTop();
+    this.domSprite.style.backgroundPosition = `${left}px ${top}px`
+
+    this.addShadow();
   }
 
 
@@ -25,9 +29,9 @@ class CharacterRenderer extends Renderer
 
       super.update();
       const animationIndex = this.getElement().getAnimationIndex();
-      const left = animationIndex * -this.getElement().width();
-      const top = this.spriteDirectionOffsets[this.getElement().getDirection()];
-      this.dom.style.backgroundPosition = `${left}px ${top}px`;
+      const left = animationIndex * -this.getElement().width() - this.getElement().getSpriteSheetOffsetLeft();
+      const top = this.spriteDirectionOffsets[this.getElement().getDirection()] - this.getElement().getSpriteSheetOffsetTop();
+      this.domSprite.style.backgroundPosition = `${left}px ${top}px`;
   }
 
 

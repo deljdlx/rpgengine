@@ -44,6 +44,10 @@ class Renderer
     this._element = element;
     this.dom = document.createElement('div');
     this.dom.classList.add('map-element');
+
+    this.domSprite = document.createElement('div');
+    this.domSprite.classList.add('map-element__sprite');
+    this.dom.append(this.domSprite);
   }
 
   /**
@@ -61,22 +65,48 @@ class Renderer
     let top = this._element.y();
 
     if(relativeTo) {
-      left += relativeTo.x();
-      top += relativeTo.y();
+      const offsets = relativeTo.getRelativeToOffsets();
+      left += offsets.x;
+      top += offsets.y;
     }
 
     this.dom.style.left = left + 'px';
     this.dom.style.top = top + 'px';
-    this.dom.style.zIndex = this._element.y() + this._element.height();
 
-    this.childDom = document.createElement('div');
-    this.dom.appendChild(this.childDom);
+    if(!this._element.manualZ) {
+      this.dom.style.zIndex = top + this._element.height();
+    }
 
+    // this.childDom = document.createElement('div');
+    // this.dom.appendChild(this.childDom);
+
+    /*
     this._element.getChildren().forEach(element => {
       this.childDom.appendChild(element.render());
     });
+    */
 
     return this.dom;
+  }
+
+  getSprite() {
+    return this.domSprite;
+  }
+
+  getShadow() {
+    return this.domShadow;
+  }
+
+  addShadow() {
+    this.domShadow = document.createElement('div');
+    this.domShadow.classList.add('map-element__shadow');
+    this.domShadow.style.width = this.getElement().width() + 'px';
+    this.domShadow.style.height = (this.getElement().height() / 3) + 'px';
+    this.domShadow.style.top = (this.getElement().height() / 3 * 2)  + 'px';
+    this.domShadow.style.left = (4)  + 'px';
+
+    this.dom.prepend(this.domShadow);
+    return this.domShadow;
   }
 
   update() {

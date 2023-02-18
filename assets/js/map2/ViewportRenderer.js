@@ -37,7 +37,7 @@ class ViewportRenderer
     this.domCharacter = this._viewport.getCharacter().getRenderer().render();
     this._viewport.getBoard().getRenderer().getDom().append(this.domCharacter);
     
-    this.renderDebug();
+    // this.renderDebug();
     
   }
 
@@ -54,22 +54,21 @@ class ViewportRenderer
 
     const zIndex =
       (
-        this._viewport.height() +
+        this._board.height() +
         (
-          this._viewport.getCharacter().y() % this._viewport.height()
+          this._viewport.getCharacter().y() % this._board.height()
         )
-      ) % this._viewport.height()
+      ) % this._board.height()
       + this._viewport.getCharacter().height()
     ;
     
     this._viewport.getCharacter().getRenderer().getDom().style.zIndex = zIndex;
 
-
     const characterTop = -top;
     const characterLeft = -left;
 
     this._viewport.getCharacter().getRenderer().getDom().style.transform =
-      `translateX(${characterLeft}px) translateY(${characterTop}px) scale(0.75)`;
+      `translateX(${characterLeft}px) translateY(${characterTop}px)`;
     
 
     this._board.getRenderer().getDom().style.transform = `translateX(${left}px) translateY(${top}px)`;

@@ -1,6 +1,7 @@
 class Element
 {
 
+  manualZ = false;
   /**
    * @type {BoundingBox}
    */
@@ -77,6 +78,21 @@ class Element
     return this._relativeTo;
   }
 
+  getRelativeToOffsets() {
+    if(!this._relativeTo) {
+      return {
+        x: 0,
+        y: 0,
+      }
+    }
+
+    const offsets = this._relativeTo.getRelativeToOffsets();
+    return {
+      x: offsets.x  + this.x(),
+      y: offsets.y  + this.y(),
+    };
+  }
+
 
   width(value = null) {
     return this.geometry.width(value);
@@ -114,6 +130,7 @@ class Element
     const element = new Element(x, y, width, height);
     this.children.push(element);
     element.setParent(this);
+    element.relativeTo(this);
     return element;
   }
 
@@ -121,6 +138,8 @@ class Element
 
     this.children.push(element);
     element.setParent(this);
+    element.relativeTo(this);
+
     element.x(x);
     element.y(y);
 
@@ -285,6 +304,20 @@ class Element
 
   getChildren() {
     return this.children;
+  }
+
+  getAllChildren() {
+    const children = [];
+    this.getChildren().forEach(parent => {
+      children.push(parent);
+      // parent.relativeTo(this);
+
+      parent.getAllChildren().forEach(child => {
+        // child.relativeTo(parent);
+        children.push(child);
+      });
+    });
+    return children;
   }
 
   getCollisionZones() {

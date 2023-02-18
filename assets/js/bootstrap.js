@@ -7,31 +7,34 @@ const MAP_CONFIGURATION = {
 const board = new Board(MAP_CONFIGURATION.width * 3, MAP_CONFIGURATION.height * 3);
 
 const area = board.getAreaAt(0, 0);
-// area.addElement(50, 50, new House00());
-
-area.addElement(10, 10, new House01());
-area.addElement(310, 10, new House01());
-area.addElement(10, 300, new House01());
 
 
-board.getAreaAt(1, 0).addElement(100, 100, new House00());
-board.getAreaAt(1, 0).addElement(50, 250, new House00());
-
-board.getAreaAt(0, -1).addElement(50, 250, new House00());
+for(let i = 0 ; i < 8 ; i++) {
+  area.addElement(384 - i * 50, 263, new Ground00());
+}
 
 
 
 
+area.addElement(300, 50, new House01());
+area.addElement(300, 300, new House01());
+area.addElement(50, 50, new FenceGroup00());
 
-/*
-for(let x = 0 ; x < 10 ; x++) {
+area.addElement(200, 360, new Fountain00());
+
+
+area.addElement(100, 260, new Character(0, 0, 48 * 3));
+
+
+
+for(let x = 0 ; x < 20 ; x++) {
   area.addElement(
-    50 + Math.random() * 200,
-    180 + Math.random() * 200,
+    70 + Math.random() * 200,
+    60 + Math.random() * 150,
     new Sunflower00()
   );
 }
-*/
+
 
 
 // board.getAreaAt(1, 0).addElement(50, 50, new House00());
