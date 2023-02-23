@@ -2,7 +2,7 @@ class Viewport
 {
   direction;
   moving = 0;
-  interval = 5;
+  interval = 4;
 
 
   /**

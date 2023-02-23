@@ -30,9 +30,10 @@
 
         #viewport {
             position: absolute;
+            contain: strict;
             border: solid 10px #ccc;
             /* overflow: hidden; */
-            transition: all 5ms linear;
+            /* transition: all 5ms linear; */
             top: 100px;
             left: 100px;
         }
@@ -56,6 +57,7 @@
         }
 
         .map-element.character .map-element__sprite {
+            will-change: transform, z-index;
             transform: scale(0.7);
         }
         .map-element.character .map-element__shadow {
@@ -63,7 +65,7 @@
             left: 14px !important;
         }
 
-        
+
         /* ===================================== */
 
         .map-element.collided {
@@ -113,7 +115,7 @@
             height: 100%;
             top: 0;
             left: 0;
-            
+
             /* background-color: #fff; */
 
             background-color: #00a;
@@ -128,7 +130,7 @@
             /* mix-blend-mode: overlay; */
             /* mix-blend-mode: luminosity; */
             /* mix-blend-mode: color-dodge; */
-            
+
         }
 
     </style>
@@ -149,7 +151,9 @@
     </template>
 
 
+    <!--
     <div id="light-test"></div>
+    // -->
 
 
     <!-- ==================================== -->
@@ -161,7 +165,7 @@
     <script src="assets/js/map2/Element.js"></script>
     <script src="assets/js/map2/Board.js"></script>
     <script src="assets/js/map2/Area.js"></script>
-    
+
     <script src="assets/js/map2/Viewport.js"></script>
 
 

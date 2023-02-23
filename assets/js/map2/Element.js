@@ -181,7 +181,7 @@ class Element
     }
   }
 
-  // =========================== 
+  // ===========================
   needUpdate(value = null) {
     if(value !== null) {
       this._needUpdate = value;
