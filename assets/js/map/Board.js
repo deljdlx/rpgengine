@@ -6,16 +6,17 @@ class Board extends Element
     super(0, 0, width, height);
 
     this.renderer = new BoardRenderer(this);
-
-    // this.createAreaAt(0, 0);
-
     for(let x = -1 ; x < 2 ; x++) {
       for(let y = -1 ; y < 2 ; y++) {
         this.createAreaAt(x, y);
       }
     }
+  }
+
+  async loadAreaAsyn(x, y) {
 
   }
+
 
   loadArea(x, y) {
     if(!this.areaExistsAt(x, y)) {
@@ -43,11 +44,9 @@ class Board extends Element
     area.getRenderer().clear();
     delete this.areas[x][y];
 
-
     return area;
-
   }
-  
+
   areaExistsAt(x, y) {
     if(typeof(this.areas[x]) === 'undefined') {
       return false;
@@ -65,18 +64,9 @@ class Board extends Element
     if(typeof(this.areas[x][y]) === 'undefined') {
       this.areas[x][y] = {};
     }
-    // this.areas[x][y] = new Area(this, x * this.width(), y * this.height());
     const area = new Area(this, 0 , 0);
     this.areas[x][y] = area;
-
-    // console.log('%cBoard.js :: 73 =============================', 'color: #f00; font-size: 1rem');
-    // console.log(this.collisionBoundingBox);
-
     this.addElement(x * this.width(), y * this.height(), area);
-
-    // console.log(this.collisionBoundingBox);
-
-
     return this.areas[x][y];
   }
 

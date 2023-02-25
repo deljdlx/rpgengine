@@ -1,17 +1,35 @@
 class Coordinates
 {
-  relative = {
-    x: 0,
-    y: 0,
-  };
-  absolute = {
-    x: 0,
-    y: 0,
-  };
+  _x;
+  _y;
 
-  setAbsolute(x, y) {
-    this.absolute.x = y;
-    this.absolute.y = y;
-    return this;
+  constructor(x = 0, y = 0) {
+    this._x = x;
+    this._y = y;
+  }
+
+  add(axis, value) {
+    if(axis === 'x') {
+      return this.x(this.x() + value);
+    }
+
+    if(axis === 'y') {
+      return this.y(this.y() + value);
+    }
+  }
+
+
+  x(value = null) {
+    if(value !== null) {
+      this._x = Math.round(value);
+    }
+    return this._x;
+  }
+
+  y(value = null) {
+    if(value !== null) {
+      this._y = Math.round(value);
+    }
+    return this._y;
   }
 }

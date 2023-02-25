@@ -1,390 +1,192 @@
+class Viewport
+{
+  direction;
+  moving = 0;
+  interval = 4;
 
-class Viewport {
-  dom;
-  map;
+
+  /**
+   * @type {Geometry}
+   */
+  geometry;
+
+  loop;
+
+  speed = 2;
+
+  /**
+   * @type {Board}
+   */
+  board;
+
+  /**
+   * @type {ViewportRenderer}
+   */
+  renderer;
+
+  /**
+   * @type {DomElement}
+   */
+  container;
+
+
+  /**
+   * @type {Character}
+   */
   character;
 
-  /**
-   * @type {Layer[]}}
-   */
-  layers = {};
+  constructor(container, board, x = 0, y = 0, width = 500, height = 500)
+  {
+    this.container = container;
+    this.board = board;
+    this.geometry = new Geometry(x, y);
+    this.geometry.x(x);
+    this.geometry.y(y);
+    this.geometry.width(width);
+    this.geometry.height(height);
+    this.renderer = new ViewportRenderer(this);
 
-  left = 0;
-  top = 0;
-
-  x = 0;
-  y = 0;
-
-  cellSize = 32;
-
-  width = 576;
-  height = 576;
-
-  movingDirection = null;
-  moving = false;
-
-  moveSpeed = 2;
-
-  listeners = {};
-
-  areaDescriptors = [];
-
-
-
-  constructor(width = 576, height = 576) {
-
-    this.width = width;
-    this.height = height;
-
-    this.dom = document.querySelector('.viewport');
-    this.dom.style.width = this.width + 'px';
-    this.dom.style.height = this.height + 'px';
-
-    this.addLayer('ground');
-    this.addLayer('surface');
-    this.initializeMainCharacter();
+    this.character = new Character();
+    this.character.x(this.width() / 2);
+    this.character.y(this.height() / 2);
   }
 
-
-  render() {
-    this.areaDescriptors.forEach(areaDescriptor => {
-      areaDescriptor.render();
-    });
-  }
-
-  /**
-   * @returns {MainCharacter}
-   */
-  getCharacter() {
+  getCharacter(){
     return this.character;
   }
 
-  /**
-   * @returns {MainCharacter}
-   */
-  initializeMainCharacter() {
-    this.character = new MainCharacter(
-      'assets/images/characters/characters-00.png',
-      (48 * 3),
-      (48 * 4),
-    );
-
-    this.character.render();
-
-    this.character.setViewport(this);
-    this.dom.appendChild(this.character.dom);
-    this.character.coordinates.absolute.x = this.x + this.width / 2;
-    this.character.coordinates.absolute.y = this.y + this.height / 2;
-
-    this.character.x = this.x + this.width / 2;
-    this.character.y = this.y + this.height / 2;
-    this.character.dom.style.left = this.width / 2 + 'px';
-    this.character.dom.style.top = this.height / 2 + 'px';
-
-    return this.character;
+  getBoard() {
+    return this.board;
   }
 
-  // ===========================
-
-  loadAreaDescriptor(areaX, areaY, areaDescriptor) {
-
-    this.areaDescriptors.push(areaDescriptor);
-    areaDescriptor.getCoordinates().setAbsolute(
-      areaX * this.cellSize,
-      areaY * this.cellSize
-    );
-
-
-    /*
-    for(let layerName in areaDescriptor.layers) {
-      const layer = this.getLayer(layerName);
-      if(layer === false) {
-        continue
-      }
-
-      for(let x in areaDescriptor.layers[layerName]) {
-        for(let y in areaDescriptor.layers[layerName][x]) {
-          const element = areaDescriptor.layers[layerName][x][y];
-          layer.getArea(areaX, areaY).addElement(element, x, y);
-          element.update();
-        }
-      }
-    }
-    */
-
-    return areaDescriptor;
+  getContainer() {
+    return this.container;
   }
-
-
-  getLayer(name) {
-    if(typeof(this.layers[name]) !== 'undefined') {
-      return this.layers[name];
-    }
-    return false;
-  }
-
-  // =========================== 
-
-
-  addEventListener(name, callback) {
-    if(typeof(this.listeners[name]) === 'undefined') {
-      this.listeners[name] = [];
-    }
-    this.listeners[name].push(callback);
-
-    return this.listeners[name].length - 1;
-  }
-
-  handle(name, data = {}) {
-    if(typeof(this.listeners[name]) !== 'undefined') {
-      this.listeners[name].map(callback => {
-        callback(data);
-      });
-    }
-  }
-
-  getViewportData() {
-    return {
-      viewport: this,
-      x: this.x,
-      y: this.y,
-      direction: this.movingDirection,
-      area: this.getCurrentAreaCoordinates(),
-    };
-  }
-
-  // =========================== 
 
   getCurrentAreaCoordinates() {
-    const areaY = Math.floor((this.y + this.height / 2) / this.height);
-    const areaX = Math.floor((this.x + this.width / 2) / this.width);
+    const x = Math.floor(this.character.x() / this.board.width());
+    const y = Math.floor((this.character.y() + 48) / this.board.height());
     return {
-      x : areaX,
-      y: areaY,
+      x: x,
+      y: y
     };
   }
 
   getCurrentArea() {
-    const {x, y} = this.getCurrentAreaCoordinates();
-    return this.layers['surface'].getArea(x, y);
+    const at = this.getCurrentAreaCoordinates();
+    return this.board.getAreaAt(at.x, at.y)
   }
 
-  getCurrentElements() {
-    return this.getCurrentArea().getElements();
+  currentAreaExists() {
+    const at = this.getCurrentAreaCoordinates();
+    return this.board.areaExistsAt(at.x, at.y);
   }
 
-  /**
-   * @param {String} layerName
-   * @param {*} fixed 
-   * @returns {Layer}
-   */
-  addLayer(layerName, fixed = false) {
-    this.layers[layerName] = new Layer(this, layerName, fixed);
-    return this.layers[layerName];
+  loadAreasFromCurrentPosition() {
+    const at = this.getCurrentAreaCoordinates();
+
+    this.board.loadArea(at.x - 1, at.y);
+    this.board.loadArea(at.x - 1, at.y - 1);
+    this.board.loadArea(at.x - 1, at.y + 1);
+
+    this.board.loadArea(at.x + 1, at.y);
+    this.board.loadArea(at.x + 1, at.y - 1);
+    this.board.loadArea(at.x + 1, at.y + 1);
+
+    this.board.loadArea(at.x, at.y + 1);
+    this.board.loadArea(at.x, at.y - 1);
   }
 
+  freeAreasFromCurrentPosision() {
+    const at = this.getCurrentAreaCoordinates();
 
-  detectCollision(sourceElement) {
+    this.board.freeArea(at.x - 2, at.y - 2);
+    this.board.freeArea(at.x - 2, at.y - 1);
+    this.board.freeArea(at.x - 2, at.y);
+    this.board.freeArea(at.x - 2, at.y + 1);
+    this.board.freeArea(at.x - 2, at.y + 2);
 
-    let hasCollision = false;
+    this.board.freeArea(at.x + 2, at.y - 2);
+    this.board.freeArea(at.x + 2, at.y - 1);
+    this.board.freeArea(at.x + 2, at.y);
+    this.board.freeArea(at.x + 2, at.y + 1);
+    this.board.freeArea(at.x + 2, at.y + 2);
 
-    if(!sourceElement) {
-      sourceElement = this.character;
-    }
+    this.board.freeArea(at.x - 1, at.y + 2);
+    this.board.freeArea(at.x, at.y + 2);
+    this.board.freeArea(at.x + 1, at.y + 2);
 
-    this.areaDescriptors.forEach(areaDescriptor => {
-      const areaBoundingBox = areaDescriptor.getBoundingBox();
-
-      const areaCollided = sourceElement.isCollided({
-        x0: areaBoundingBox.x0 + areaDescriptor.getCoordinates().absolute.x,
-        x1: areaBoundingBox.x1 + areaDescriptor.getCoordinates().absolute.x,
-        y0: areaBoundingBox.y0 + areaDescriptor.getCoordinates().absolute.y,
-        y1: areaBoundingBox.y1 + areaDescriptor.getCoordinates().absolute.y,
-      });
-
-      if(areaCollided) {
-        console.log('%cViewport.js :: 193 =============================', 'color: #f00; font-size: 1rem');
-        console.log("COLLISION");
-        areaDescriptor.getGroups().forEach(group => {
-          const groupBoundingBox = group.getBoundingBox();
-          // console.log('%cViewport.js :: 195 =============================', 'color: #f00; font-size: 1rem');
-          // console.log(groupBoundingBox);
-        })
-      }
-    });
-
-    return false;
-
-
-    for(let layerName in this.layers) {
-
-      if(hasCollision) {
-        break;
-      }
-
-      const map = this.layers[layerName].map;
-
-      for (let x  in map.areas) {
-
-        if(hasCollision) {
-          break;
-        }
-
-        for (let y in map.areas[x]) {
-          const area = map.areas[x][y];
-
-          if(hasCollision) {
-            break;
-          }
-
-          area.getElements().forEach((elementDescriptor) => {
-
-            if(hasCollision) {
-              return true;
-            }
-
-            const element = elementDescriptor.element;
-
-            if(sourceElement === elementDescriptor.element) {
-              return hasCollision;
-            }
-
-
-            if(sourceElement !== this.character) {
-              if(sourceElement.isCollided(this.character.getDescriptor())) {
-                hasCollision = true;
-
-                /*
-                sourceElement.handle('collision', {
-                  source: sourceElement,
-                  target: this.character,
-                  withMainCharacter: true,
-                });
-                */
-
-                return true;
-              }
-            }
-
-            if(sourceElement.isCollided(elementDescriptor)) {
-              hasCollision = true;
-              /*
-              const withMainCharacter = (sourceElement === this.character) ? true : false;
-              element.handle('collision', {
-                source: element,
-                target: sourceElement,
-                withMainCharacter: withMainCharacter,
-              });
-              */
-
-              element.dom.classList.add('collision');
-            }
-            else {
-              element.dom.classList.remove('collision');
-            }
-          });
-        }
-      }
-    }
-
-    /*
-    if(hasCollision) {
-      this.handle('collision');
-    }
-    */
-
-    return hasCollision;
+    this.board.freeArea(at.x - 1, at.y - 2);
+    this.board.freeArea(at.x, at.y - 2);
+    this.board.freeArea(at.x + 1, at.y - 2);
   }
 
-  stop() {
-    this.moving = false;
-    this.movingDirection = null;
-    this.character.stop();
+  // ===========================
+
+  startLoop() {
+    this.tick();
   }
+
+  tick() {
+    this.update();
+    this.loop = setTimeout(() => {
+      this.tick();
+    }, this.interval)
+  }
+
+  // ===========================
 
   update() {
 
-    if(!this.moving) {
+    if(this.moving === 0) {
       return;
     }
 
-    const currentX = this.x;
-    const currentY = this.y;
+    this.loadAreasFromCurrentPosition();
+    this.freeAreasFromCurrentPosision();
 
-    if(this.movingDirection === 'up') {
-      this.y -= this.moveSpeed;
-    }
-    else if(this.movingDirection === 'down') {
-      this.y += this.moveSpeed;
-    }
-    else if(this.movingDirection === 'left') {
-      this.x -= this.moveSpeed;
-    }
-    else if(this.movingDirection === 'right') {
-      this.x += this.moveSpeed;
+    const saveGeometry = this.geometry.clone();
+    switch(this.direction) {
+      case 'up': { this.geometry.add('y', -this.speed); break; }
+      case 'down': { this.geometry.add('y', this.speed); break; }
+      case 'left': { this.geometry.add('x', -this.speed); break; }
+      case 'right': { this.geometry.add('x', this.speed); break; }
     }
 
-    this.character.coordinates.absolute.x = this.x + this.width / 2;
-    this.character.coordinates.absolute.y = this.y + this.height / 2;
+    this.character.x(this.x() + this.width() / 2);
+    this.character.y(this.y() + this.height() / 2);
+
+    let collisions = this.character.getCollision(this.board);
 
 
-    const collision = this.detectCollision();
-
-    if(collision) {
-      this.x = currentX;
-      this.y = currentY;
-
-      this.character.coordinates.absolute.x = this.x + this.width / 2;
-      this.character.coordinates.absolute.y = this.y + this.height / 2;
-
-      this.stop();
-      return;
+    if(collisions.length) {
+      this.geometry = saveGeometry;
+      this.character.x(this.x() + this.width() / 2);
+      this.character.y(this.y() + this.height() / 2);
     }
 
-    this.character.go(this.movingDirection);
-
-    this.handle('move', {
-      viewport: this.getViewportData(),
-    });
-
-    const currentArea = this.getCurrentAreaCoordinates();
-    for(let layerName in this.layers) {
-      const map = this.layers[layerName].map;
-      map.dom.style.left = this.x * -1 + 'px';
-      map.dom.style.top = this.y * -1 + 'px';
-      map.loadAreasAround(currentArea.x, currentArea.y);
-    }
-
-
-    this.getCurrentElements().map(elementDescriptor => {
-      const element = elementDescriptor.element;
-      element.update();
-    })
-
-
-    setTimeout(() => {
-      this.update();
-    }, 5);
+    this.getBoard().update();
+    this.renderer.update();
+    this.character.update();
   }
 
+  render() {
+    return this.renderer.render(this.container);
+  }
+
+  // ===========================
+
+  stop() {
+    this.moving = 0;
+  }
 
   move(direction) {
-    if(this.moving) {
-      return;
-    }
-
-    this.moving = true;
-
-    if(direction) {
-      this.movingDirection = direction;
-    }
-
-    this.update();
+    this.direction = direction;
+    this.moving = 1;
+    this.character.setDirection(this.direction);
   }
 
-
-  launch() {
-
+  run() {
     document.body.addEventListener('keyup', (event) => {
       this.stop();
       return;
@@ -405,5 +207,32 @@ class Viewport {
         this.move('down');
       }
     });
+
+    this.startLoop()
   }
+
+  getBoard() {
+    return this.board;
+  }
+
+  getGeometry() {
+    return this.geometry;
+  }
+
+  x(value = null) {
+    return this.geometry.x(value);
+  }
+
+  y(value = null) {
+    return this.geometry.y(value);
+  }
+
+  width(value = null) {
+    return this.geometry.width(value);
+  }
+
+  height(value = null) {
+    return this.geometry.height(value);
+  }
+
 }
