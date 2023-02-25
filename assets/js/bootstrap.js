@@ -1,111 +1,82 @@
-
-const MAP_CONFIGURATION = {
-  width: 400,
-  height: 400,
-}
-
-const board = new Board(MAP_CONFIGURATION.width * 3, MAP_CONFIGURATION.height * 3);
-
-const area = board.getAreaAt(0, 0);
+document.addEventListener('DOMContentLoaded', async () => {
 
 
-for(let i = 0 ; i < 8 ; i++) {
-  area.addElement(384 - i * 50, 263, new Ground00());
-}
+  const MAP_CONFIGURATION = {
+    width: 600,
+    height: 400,
+  }
 
-
-
-
-area.addElement(300, 50, new House01());
-area.addElement(300, 300, new House01());
-area.addElement(50, 50, new FenceGroup00());
-
-area.addElement(200, 360, new Fountain00());
-
-
-area.addElement(100, 260, new Character(0, 0, 48 * 3));
-
-
-
-for(let x = 0 ; x < 20 ; x++) {
-  area.addElement(
-    70 + Math.random() * 200,
-    60 + Math.random() * 150,
-    new Sunflower00()
+  const application = new Application(
+    '#viewport',
+    MAP_CONFIGURATION.width,
+    MAP_CONFIGURATION.height,
   );
-}
+
+  application.registerElement('FenceGroup00', FenceGroup00);
+  application.registerElement('House00', House00);
+  application.registerElement('House01', House01);
+  application.registerElement('Fountain00', Fountain00);
+  application.registerElement('Woman00', Woman00);
+
+  application.run();
+
+
+//  const board = application.getViewport().getBoard();
+//   const area = await board.getAreaAt(0, 0);
+//   area.addElement(10, 0, new House01());
+// board.getRenderer().renderAreas();
 
 
 
-// board.getAreaAt(1, 0).addElement(50, 50, new House00());
-
-
-// console.log('%cbootstrap.js :: 32 =============================', 'color: #f00; font-size: 1rem');
-// console.log(board.collisionBoundingBox);
-
-// board.getAreaAt(1, 0).addElement(200, 200, new House00());
-
-
-
-// area.addElement(70, 180, new Sunflower00());
-
-
-// area.createElement(50, 50, 130, 130).createCollisionZone(10, 50, 110, 70);
-
-
-// board.getAreaAt(1, 0).createElement(0, 0, 30, 30).createCollisionZone(0, 0, 30, 30);
-// board.getAreaAt(1, 1).createElement(0, 0, 30, 30).createCollisionZone(0, 0, 30, 30);
-
-/*
-board.getAreaAt(-1, 0).createElement(0, 0, 80, 80)
-  .createElement(50, 50)
-  .createCollisionZone(0, 0, 10, 10)
-;
-*/
+  /*
+  for(let i = 0 ; i < 8 ; i++) {
+    area.addElement(384 - i * 50, 263, new Ground00());
+  }
 
 
 
 
 
+  area.addElement(300, 310, new House01());
 
-// board.x(0);
-// board.y(0);
-// board.width(200);
-// board.height(200);
+  area.addElement(50, 50, new FenceGroup00());
 
-/*
-const area = new Area(board);
-
-area.createCollisionZone(50,50, 50, 50);
-area.createCollisionZone(100,100, 50, 50);
-
-const child = area.createElement(200, 0, 300, 300);
-child.createCollisionZone(0, 0, 50, 50);
-child.createCollisionZone(50,50, 50, 50);
-  const child2 = child.createElement(100,100, 200, 200);
-  child2.createCollisionZone(50,50, 50, 50);
+  area.addElement(200, 360, new Fountain00());
 
 
-const child3 = area.createElement(100, 200, 300, 300);
-  child3.createCollisionZone(0, 0, 50, 50);
-  child3.createCollisionZone(50,50, 50, 50);
-*/
+  const character = area.addElement(100, 260, new Character(0, 0, 48 * 3));
+
+  setTimeout(() => {
+    character.moveTo(200, 260, (character) => {
+      console.log('%cbootstrap.js :: 33 =============================', 'color: #f00; font-size: 1rem');
+      console.log("GOAL");
+    });
+  });
 
 
-const viewport = new Viewport(
-  document.querySelector('#viewport'),
-  board,
-  0,
-  0,
-  MAP_CONFIGURATION.width,
-  MAP_CONFIGURATION.height,
-);
-
-viewport.render();
-viewport.run();
-
-//board.renderCollisionZones();
+  for(let x = 0 ; x < 20 ; x++) {
+    area.addElement(
+      70 + Math.random() * 200,
+      60 + Math.random() * 150,
+      new Sunflower00()
+    );
+  }
+  */
 
 
-// console.log('%cbootstrap.js :: 67 =============================', 'color: #f00; font-size: 1rem');
-// console.log(board);
+
+
+  // viewport.render();
+
+  // viewport.renderDebug();
+
+
+  // viewport.run();
+
+  // board.renderCollisionZones();
+  // console.log('%cbootstrap.js :: 67 =============================', 'color: #f00; font-size: 1rem');
+  // console.log(board);
+
+
+
+});

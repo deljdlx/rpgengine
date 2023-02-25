@@ -1,6 +1,9 @@
 class Element
 {
 
+
+  _hasSprite = true;
+
   manualZ = false;
   /**
    * @type {BoundingBox}
@@ -53,7 +56,22 @@ class Element
 
   rendered = false;
 
+  /**
+   * @type {?Element}
+   */
   _relativeTo = null;
+
+  /**
+   * @type {boolean}
+   */
+  _staticPosition = false;
+  _targetX;
+  _targetY;
+  _targetHitZone = 2;
+  _onMoveEnd = () => null;
+  _moving = false;
+  _movingSpeed = 2;
+
 
   constructor(x = null, y = null, width = null, height = null)
   {
@@ -70,11 +88,93 @@ class Element
     this.height(height);
   }
 
+  /**
+   *
+   * @param {?boolean} value
+   * @returns {boolean}
+   */
+  staticPosition(value = null) {
+    if(value  !== null) {
+      this._staticPosition = value;
+    }
+    return this._staticPosition;
+  }
+
+
+  // ===========================
+
+  movingSpeed(value = null) {
+    if(value !== null) {
+      this._movingSpeed = value;
+    }
+
+    return this._movingSpeed;
+  }
+
+  isMoving(value = null) {
+    if(value !== null) {
+      this._moving = value;
+    }
+
+    return this._moving;
+  }
+
+  update() {
+
+    if(this.isMoving() && this.y() < this._targetY) {
+      this.direction = 'down';
+      this.y(this.y() + this._movingSpeed);
+    }
+    else if(this.isMoving() && this.x() < this._targetX) {
+      this.direction = 'right';
+      this.x(this.x() + this._movingSpeed);
+    }
+
+    if(this.parent) {
+      this.parent.updateCollisionBoundingBox(this);
+    }
+
+    if(this.needUpdate() || this.isMoving()) {
+      if(
+        Math.abs(this._targetX - this.x()) <= this._targetHitZone
+        && Math.abs(this._targetY - this.y()) <= this._targetHitZone
+        && this.isMoving()
+      ) {
+        this._moving = false;
+        this._onMoveEnd(this);
+      }
+
+      this.getRenderer().update();
+      this.getChildren().forEach(element => {
+        element.update();
+      });
+    }
+
+    this.needUpdate(false);
+  }
+
+  moveTo(x, y, onEnd = () => {}) {
+
+    this._targetX = x;
+    this._targetY = y;
+    this._moving = true;
+    this._onMoveEnd = onEnd;
+    this.needUpdate(true);
+
+    return this;
+  }
+
+
+  /**
+   *
+   * @param {?Element} element
+   * @returns
+   */
   relativeTo(element = null) {
     if(element !== null) {
       this._relativeTo = element;
     }
-    
+
     return this._relativeTo;
   }
 
@@ -126,6 +226,14 @@ class Element
     return this.y();
   }
 
+  /**
+   * @param {number} x
+   * @param {number} y
+   * @param {number} width
+   * @param {number} height
+   * @returns {Element}
+   */
+
   createElement(x = null, y = null, width = null, height = null) {
     const element = new Element(x, y, width, height);
     this.children.push(element);
@@ -134,6 +242,12 @@ class Element
     return element;
   }
 
+  /**
+   * @param {number} x
+   * @param {number} y
+   * @param {Element} element
+   * @returns {Element}
+   */
   addElement(x = 0, y = 0, element) {
 
     this.children.push(element);
@@ -144,7 +258,7 @@ class Element
     element.y(y);
 
     this.updateCollisionBoundingBox(element);
-    
+
     if(this.parent) {
       this.parent.updateCollisionBoundingBox(this);
     }
@@ -194,7 +308,7 @@ class Element
   }
 
 
-  // =========================== 
+  // ===========================
 
   collided(value = null) {
 
@@ -223,7 +337,7 @@ class Element
       return false;
     }
 
-   
+
     const boundingBoxCollided = this.getCollisionBoundingBox().isCollided(
       element.getCollisionBoundingBox()
     );
@@ -278,20 +392,6 @@ class Element
     });
   }
 
-  // ===========================
-
-  update() {
-    if(this.needUpdate()) {
-      this.getRenderer().update();
-
-      this.getChildren().forEach(element => {
-        element.update();
-      });
-
-    }
-
-    this.needUpdate(false);
-  }
 
   /**
    * @param {Element} element
@@ -346,11 +446,11 @@ class Element
    * @returns {Boolean}
    */
   isRendered() {
-    return this.redered;
+    return this.rendered;
   }
 
   /**
-   * @returns 
+   * @returns
    */
   render() {
     this.rendered = true;

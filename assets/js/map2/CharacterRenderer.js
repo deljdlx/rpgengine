@@ -15,7 +15,7 @@ class CharacterRenderer extends Renderer
     super(element);
     this.dom.classList.add('character');
     this.domSprite.style.backgroundImage = `url('assets/images/characters/characters-00.png')`;
-    
+
     const left = -this.getElement().width() - this.getElement().getSpriteSheetOffsetLeft();
 
     const top = this.spriteDirectionOffsets['down'] - this.getElement().getSpriteSheetOffsetTop();
@@ -26,12 +26,34 @@ class CharacterRenderer extends Renderer
 
 
   update() {
+    super.update();
+    const animationIndex = this.getElement().getAnimationIndex();
+    const left = animationIndex * -this.getElement().width() - this.getElement().getSpriteSheetOffsetLeft();
+    const top = this.spriteDirectionOffsets[this.getElement().getDirection()] - this.getElement().getSpriteSheetOffsetTop();
+    this.domSprite.style.backgroundPosition = `${left}px ${top}px`;
 
-      super.update();
-      const animationIndex = this.getElement().getAnimationIndex();
-      const left = animationIndex * -this.getElement().width() - this.getElement().getSpriteSheetOffsetLeft();
-      const top = this.spriteDirectionOffsets[this.getElement().getDirection()] - this.getElement().getSpriteSheetOffsetTop();
-      this.domSprite.style.backgroundPosition = `${left}px ${top}px`;
+    if(!this.getElement().staticPosition()) {
+      const relativeTo = this.getElement().relativeTo();
+      let left = this.getElement().x();
+      let top = this.getElement().y();
+
+      if(relativeTo) {
+        const offsets = relativeTo.getRelativeToOffsets();
+        left += offsets.x;
+        top += offsets.y;
+      }
+
+      this.dom.style.left = left + 'px';
+      this.dom.style.top = top + 'px';
+
+      if(!this.getElement().manualZ) {
+        this.dom.style.zIndex = top + this._element.height();
+      }
+    }
+
+
+
+
   }
 
 

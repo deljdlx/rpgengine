@@ -6,6 +6,7 @@ class Renderer
    */
   _element;
 
+
   /**
    * @type {DomElement}
    */
@@ -37,21 +38,23 @@ class Renderer
   boundingBox;
 
   /**
-   * 
-   * @param {Element} element 
+   *
+   * @param {Element} element
    */
   constructor(element) {
     this._element = element;
     this.dom = document.createElement('div');
     this.dom.classList.add('map-element');
 
-    this.domSprite = document.createElement('div');
-    this.domSprite.classList.add('map-element__sprite');
-    this.dom.append(this.domSprite);
+    if(this._element._hasSprite) {
+      this.domSprite = document.createElement('div');
+      this.domSprite.classList.add('map-element__sprite');
+      this.dom.append(this.domSprite);
+    }
   }
 
   /**
-   * @param {Element|null} referenceElement 
+   * @param {Element|null} referenceElement
    * @returns {DomElement}
    */
   render() {
@@ -139,7 +142,6 @@ class Renderer
   }
 
   renderCollisionZones() {
-
     const element = this._element;
 
     if(this.collisiondDom) {

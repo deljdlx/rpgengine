@@ -1,35 +1,58 @@
 class Board extends Element
 {
+  _viewport;
   areas = {};
+  // _hasSprite = false;
 
-  constructor(width = null, height = null) {
-    super(0, 0, width, height);
+  constructor(viewport) {
+    super(0, 0, 800, 800);
+
+    this._viewport = viewport;
+    this._application = viewport.getApplication();
 
     this.renderer = new BoardRenderer(this);
-
-    // this.createAreaAt(0, 0);
-
-    for(let x = -1 ; x < 2 ; x++) {
-      for(let y = -1 ; y < 2 ; y++) {
-        this.createAreaAt(x, y);
-      }
-    }
-
   }
 
-  loadArea(x, y) {
+  async initialize() {
+    const promises = [];
+    for(let x = -1 ; x < 2 ; x++) {
+      for(let y = -1 ; y < 2 ; y++) {
+        promises.push(this.loadArea(x, y));
+      }
+    }
+    return Promise.all(promises);
+  }
+
+  update() {
+    this.getAreas(true).forEach(area => {
+      area.update();
+    });
+  }
+
+  async loadArea(x, y) {
     if(!this.areaExistsAt(x, y)) {
+
       const area = this.createAreaAt(x, y);
-      this.getRenderer().update();
-      return area;
+      return this._application.fetchArea(x, y).then(data => {
+        data.forEach(descriptor => {
+          area.addElement(
+            descriptor.x,
+            descriptor.y,
+            this._application.instanciate(descriptor.element),
+          );
+        });
+
+        // this.getRenderer().renderAreas();
+        return area;
+      });
     }
 
     return this.areas[x][y];
   }
 
-  getAreaAt(x, y) {
+  async getAreaAt(x, y) {
     if(!this.areaExistsAt(x, y)) {
-      this.loadArea(x, y);
+      return await this.loadArea(x, y);
     }
 
     return this.areas[x][y];
@@ -47,7 +70,7 @@ class Board extends Element
     return area;
 
   }
-  
+
   areaExistsAt(x, y) {
     if(typeof(this.areas[x]) === 'undefined') {
       return false;
@@ -69,18 +92,23 @@ class Board extends Element
     const area = new Area(this, 0 , 0);
     this.areas[x][y] = area;
 
-    // console.log('%cBoard.js :: 73 =============================', 'color: #f00; font-size: 1rem');
-    // console.log(this.collisionBoundingBox);
-
     this.addElement(x * this.width(), y * this.height(), area);
-
-    // console.log(this.collisionBoundingBox);
-
 
     return this.areas[x][y];
   }
 
-  getAreas() {
+  getAreas(flatten = false) {
+    if(flatten) {
+      const areas = [];
+      for(let x in this.areas) {
+        const row = this.areas[x];
+        for(let y in row) {
+          areas.push(row[y]);
+        }
+      }
+      return areas;
+    }
+
     return this.areas;
   }
 }

@@ -31,14 +31,11 @@ class ViewportRenderer
   render() {
     this._container.style.width = this._viewport.getGeometry().width() + 'px';
     this._container.style.height = this._viewport.getGeometry().height() + 'px';
-    this._container.append(this._viewport.getBoard().render());
 
+    this._container.append(this._viewport.getBoard().render());
 
     this.domCharacter = this._viewport.getCharacter().getRenderer().render();
     this._viewport.getBoard().getRenderer().getDom().append(this.domCharacter);
-
-    this.renderDebug();
-
   }
 
   renderDebug() {
@@ -66,7 +63,7 @@ class ViewportRenderer
     const characterLeft = -left;
 
     this._viewport.getCharacter().getRenderer().getDom().style.transform =
-      `translateZ(${-zIndex}px) translateX(${characterLeft}px) translateY(${characterTop}px)`;
+      `translateX(${characterLeft}px) translateY(${characterTop}px)`;
 
 
     this._board.getRenderer().getDom().style.transform = `translateX(${left}px) translateY(${top}px)`;
