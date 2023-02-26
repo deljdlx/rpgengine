@@ -8,12 +8,8 @@ class Character extends Element
   spriteSheetOffsetTop = 0;
 
 
-  tickInterval = 8;
+  tickInterval = 7;
   tick = 0;
-
-
-
-
 
   constructor(x = null, y = null, spriteSheetOffsetLeft = 0, spriteSheetOffsetTop = 0) {
     super(x, y, 48, 48);
@@ -24,9 +20,6 @@ class Character extends Element
     this.createCollisionZone(16, 24, 14, 12);
     this.renderer = new CharacterRenderer(this);
   }
-
-
-
 
   getSpriteSheetOffsetLeft() {
     return this.spriteSheetOffsetLeft;
@@ -45,13 +38,12 @@ class Character extends Element
   }
 
   update() {
-    if(this._moving) {
-      this.tick = (++this.tick % this.tickInterval);
-      if(this.tick === 0) {
-        this.animationIndex = (++this.animationIndex % 3);
-      }
+    const tickInterval = Math.round(this.moveSpeed() / 80);
+    this.tick = (++this.tick % tickInterval);
+    if(this.tick === 0) {
+      this.animationIndex = (++this.animationIndex % 3);
     }
-    super.update();
+    this.getRenderer().update();
   }
 
   setDirection(direction) {

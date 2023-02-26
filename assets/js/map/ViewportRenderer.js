@@ -31,11 +31,14 @@ class ViewportRenderer
   render() {
     this._container.style.width = this._viewport.getGeometry().width() + 'px';
     this._container.style.height = this._viewport.getGeometry().height() + 'px';
-
     this._container.append(this._viewport.getBoard().render());
+
 
     this.domCharacter = this._viewport.getCharacter().getRenderer().render();
     this._viewport.getBoard().getRenderer().getDom().append(this.domCharacter);
+
+    this.renderDebug();
+
   }
 
   renderDebug() {
@@ -47,14 +50,14 @@ class ViewportRenderer
     const left = -this._viewport.x();
     const top = -this._viewport.y();
 
+    // -1 : zindex fine tuning
     const zIndex =
       (
         this._board.height() +
         (
-          this._viewport.getCharacter().y() % this._board.height()
+          (this._viewport.getCharacter().y()) % this._board.height() + (this._viewport.getCharacter().height() - 1)
         )
       ) % this._board.height()
-      + this._viewport.getCharacter().height()
     ;
 
     this._viewport.getCharacter().getRenderer().getDom().style.zIndex = zIndex;
@@ -63,7 +66,7 @@ class ViewportRenderer
     const characterLeft = -left;
 
     this._viewport.getCharacter().getRenderer().getDom().style.transform =
-      `translateX(${characterLeft}px) translateY(${characterTop}px)`;
+      `translateZ(${-zIndex}px) translateX(${characterLeft}px) translateY(${characterTop}px)`;
 
 
     this._board.getRenderer().getDom().style.transform = `translateX(${left}px) translateY(${top}px)`;

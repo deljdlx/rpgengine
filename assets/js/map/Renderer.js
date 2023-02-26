@@ -6,7 +6,6 @@ class Renderer
    */
   _element;
 
-
   /**
    * @type {DomElement}
    */
@@ -37,7 +36,8 @@ class Renderer
    */
   boundingBox;
 
-  /**
+
+   /**
    *
    * @param {Element} element
    */
@@ -46,11 +46,9 @@ class Renderer
     this.dom = document.createElement('div');
     this.dom.classList.add('map-element');
 
-    if(this._element._hasSprite) {
-      this.domSprite = document.createElement('div');
-      this.domSprite.classList.add('map-element__sprite');
-      this.dom.append(this.domSprite);
-    }
+    this.domSprite = document.createElement('div');
+    this.domSprite.classList.add('map-element__sprite');
+    this.dom.append(this.domSprite);
   }
 
   /**
@@ -66,6 +64,7 @@ class Renderer
 
     let left = this._element.x();
     let top = this._element.y();
+    const zIndex = top;
 
     if(relativeTo) {
       const offsets = relativeTo.getRelativeToOffsets();
@@ -77,17 +76,8 @@ class Renderer
     this.dom.style.top = top + 'px';
 
     if(!this._element.manualZ) {
-      this.dom.style.zIndex = top + this._element.height();
+      this.dom.style.zIndex = zIndex + this._element.height();
     }
-
-    // this.childDom = document.createElement('div');
-    // this.dom.appendChild(this.childDom);
-
-    /*
-    this._element.getChildren().forEach(element => {
-      this.childDom.appendChild(element.render());
-    });
-    */
 
     return this.dom;
   }
@@ -113,13 +103,14 @@ class Renderer
   }
 
   update() {
-
+    /*
     if(this._element.collided()) {
       this.dom.classList.add('collided');
     }
     else {
       this.dom.classList.remove('collided');
     }
+    */
   }
 
   getDom() {
@@ -142,6 +133,7 @@ class Renderer
   }
 
   renderCollisionZones() {
+
     const element = this._element;
 
     if(this.collisiondDom) {

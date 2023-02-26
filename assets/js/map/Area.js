@@ -5,9 +5,6 @@ class Area extends Element
    */
   board;
 
-
-  // _hasSprite = false;
-
   /**
    * 
    * @param {Board} board 
@@ -17,14 +14,7 @@ class Area extends Element
   constructor(board, x, y) {
     super(x, y, board.width(), board.height());
     this.board = board;
+    this.setApplication(board.getApplication());
     this.renderer = new AreaRenderer(this);
   }
-
-  update() {
-    this.getRenderer().update();
-    this.getChildren().forEach(element => {
-      element.update();
-    });
-  }
-
 }

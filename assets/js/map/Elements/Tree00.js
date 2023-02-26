@@ -1,33 +1,20 @@
-class Tree00 extends MapElement
+class Tree00 extends Element
 {
-  constructor()
-  {
-    super(
-      64,
-      64,
-    );
+  constructor() {
+    super(0, 0 , 64, 64)
+    this.createCollisionZone(24, 34, 16, 24);
+  }
 
-    this.addCollisionZone(40, 40, 12, 18);
-
-    this.sprite = document.createElement('div');
-    this.sprite.classList.add('sprite');
-    this.sprite.style.backgroundImage = 'url(assets/images/map/map-sprites-01.png)';
-    this.sprite.style.backgroundPosition = '-256px 0';
-    this.sprite.style.zIndex = 10;
-    this.dom.appendChild(this.sprite);
-
-    
-
-    /*
-    this.shadow = document.createElement('div');
-    this.shadow.classList.add('shadow');
-    this.shadow.style.width = '32px';
-    this.shadow.style.height = '32px';
-    this.shadow.style.bottom = '-16px';
-    this.shadow.style.left = '8px';
-    this.shadow.style.zIndex = 20;
-    this.dom.appendChild(this.shadow);
-    */
-
+  render() {
+    super.render();
+    this.getRenderer().getSprite().style.backgroundImage = 'url(assets/images/map/map-sprites-01.png)';
+    this.getRenderer().getSprite().style.backgroundPosition = '-256px 0';
+    this.getRenderer().addShadow();
+    this.getRenderer().getShadow().style.width = '48px';
+    this.getRenderer().getShadow().style.height = '30px';
+    this.getRenderer().getShadow().style.top = '45px';
+    this.getRenderer().getShadow().style.left = '10px';
+    this.getRenderer().getShadow().style.borderRadius = '100%';
+    return this.dom;
   }
 }

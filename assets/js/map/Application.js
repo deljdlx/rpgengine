@@ -3,6 +3,7 @@ class Application
 
   _elementsClasses = {};
   _viewport;
+  listeners = {};
 
 
   constructor(selector, width, height) {
@@ -14,6 +15,23 @@ class Application
       width,
       height,
     );
+  }
+
+  addEventListener(name, callback) {
+    if(typeof(this.listeners[name]) === 'undefined') {
+      this.listeners[name] = [];
+    }
+    this.listeners[name].push(callback);
+
+    return this.listeners[name].length - 1;
+  }
+
+  handle(name, data = {}) {
+    if(typeof(this.listeners[name]) !== 'undefined') {
+      this.listeners[name].map(callback => {
+        callback(data);
+      });
+    }
   }
 
   registerElement(name, constructorName) {
