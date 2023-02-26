@@ -13,7 +13,7 @@ class Character extends Element
 
   constructor(x = null, y = null, spriteSheetOffsetLeft = 0, spriteSheetOffsetTop = 0) {
     super(x, y, 48, 48);
-    
+
     this.spriteSheetOffsetLeft = spriteSheetOffsetLeft;
     this.spriteSheetOffsetTop = spriteSheetOffsetTop;
 
@@ -38,7 +38,8 @@ class Character extends Element
   }
 
   update() {
-    this.tick = (++this.tick % this.tickInterval);
+    const tickInterval = Math.round(this.moveSpeed() / 80);
+    this.tick = (++this.tick % tickInterval);
     if(this.tick === 0) {
       this.animationIndex = (++this.animationIndex % 3);
     }

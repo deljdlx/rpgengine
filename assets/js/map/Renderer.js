@@ -36,9 +36,10 @@ class Renderer
    */
   boundingBox;
 
-  /**
-   * 
-   * @param {Element} element 
+
+   /**
+   *
+   * @param {Element} element
    */
   constructor(element) {
     this._element = element;
@@ -51,7 +52,7 @@ class Renderer
   }
 
   /**
-   * @param {Element|null} referenceElement 
+   * @param {Element|null} referenceElement
    * @returns {DomElement}
    */
   render() {
@@ -63,6 +64,7 @@ class Renderer
 
     let left = this._element.x();
     let top = this._element.y();
+    const zIndex = top;
 
     if(relativeTo) {
       const offsets = relativeTo.getRelativeToOffsets();
@@ -74,17 +76,8 @@ class Renderer
     this.dom.style.top = top + 'px';
 
     if(!this._element.manualZ) {
-      this.dom.style.zIndex = top + this._element.height();
+      this.dom.style.zIndex = zIndex + this._element.height();
     }
-
-    // this.childDom = document.createElement('div');
-    // this.dom.appendChild(this.childDom);
-
-    /*
-    this._element.getChildren().forEach(element => {
-      this.childDom.appendChild(element.render());
-    });
-    */
 
     return this.dom;
   }
@@ -110,13 +103,14 @@ class Renderer
   }
 
   update() {
-
+    /*
     if(this._element.collided()) {
       this.dom.classList.add('collided');
     }
     else {
       this.dom.classList.remove('collided');
     }
+    */
   }
 
   getDom() {

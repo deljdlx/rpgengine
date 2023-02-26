@@ -2,10 +2,15 @@ class Board extends Element
 {
   areas = {};
 
-  constructor(width = null, height = null) {
-    super(0, 0, width, height);
+  constructor(viewport) {
+    super(0, 0, 800, 800);
+    this._viewport = viewport;
+    this._application = viewport.getApplication();
 
     this.renderer = new BoardRenderer(this);
+  }
+
+  initialize() {
     for(let x = -1 ; x < 2 ; x++) {
       for(let y = -1 ; y < 2 ; y++) {
         this.createAreaAt(x, y);
@@ -13,15 +18,42 @@ class Board extends Element
     }
   }
 
-  async loadAreaAsyn(x, y) {
+  async initializeAsync() {
+    let promises = []
+    for(let x = -1 ; x < 2 ; x++) {
+      for(let y = -1 ; y < 2 ; y++) {
+        promises.push(this.loadAreaAsync(x, y));
+      }
+    }
 
+    return Promise.all(promises);
+  }
+
+  async loadAreaAsync(x, y) {
+    if(!this.areaExistsAt(x, y)) {
+
+      const area = this.createAreaAt(x, y);
+      return this._application.fetchArea(x, y).then(data => {
+        data.forEach(descriptor => {
+          area.addElement(
+            descriptor.x,
+            descriptor.y,
+            this._application.instanciate(descriptor.element),
+          );
+        });
+        return area;
+      });
+    }
+    return this.areas[x][y];
   }
 
 
   loadArea(x, y) {
     if(!this.areaExistsAt(x, y)) {
       const area = this.createAreaAt(x, y);
+
       this.getRenderer().update();
+
       return area;
     }
 

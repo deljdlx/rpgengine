@@ -15,7 +15,7 @@ class CharacterRenderer extends Renderer
     super(element);
     this.dom.classList.add('character');
     this.domSprite.style.backgroundImage = `url('assets/images/characters/characters-00.png')`;
-    
+
     const left = -this.getElement().width() - this.getElement().getSpriteSheetOffsetLeft();
 
     const top = this.spriteDirectionOffsets['down'] - this.getElement().getSpriteSheetOffsetTop();

@@ -1,16 +1,36 @@
 class Element
 {
 
+  _application;
+
   manualZ = false;
   /**
    * @type {BoundingBox}
    */
   boundingBox;
 
+  _collided = {
+    collision: false,
+    trigger: false,
+  };
+
   /**
-   * @type {Boolean}
+   * @type {Element}
    */
-  _collided;
+  // collisionZones = [];
+  collisionZones = {
+    collision: [],
+    trigger: [],
+  };
+
+  collidedWith = {
+    collision: [],
+    trigger: [],
+  };
+
+
+  triggerZones = [];
+
 
 
   /**
@@ -40,10 +60,8 @@ class Element
    */
   renderer;
 
-  /**
-   * @type {Element}
-   */
-  collisionZones = [];
+
+
 
 
   /**
@@ -54,6 +72,21 @@ class Element
   rendered = false;
 
   _relativeTo = null;
+
+  /**
+   * @type {boolean}
+   */
+  _staticPosition = false;
+  _targetX;
+  _targetY;
+  _targetHitZone = 2;
+  _onMoveEnd = () => null;
+  _moving = false;
+  _moveSpeed = 100;
+
+
+  listeners = {};
+
 
   constructor(x = null, y = null, width = null, height = null)
   {
@@ -70,11 +103,120 @@ class Element
     this.height(height);
   }
 
+  // ===========================
+
+  addEventListener(name, callback) {
+    if(typeof(this.listeners[name]) === 'undefined') {
+      this.listeners[name] = [];
+    }
+    this.listeners[name].push(callback);
+
+    return this.listeners[name].length - 1;
+  }
+
+  handle(name, data = {}) {
+    if(typeof(this.listeners[name]) !== 'undefined') {
+      this.listeners[name].map(callback => {
+        callback(data);
+      });
+    }
+    this.getApplication().handle(name, data);
+  }
+
+  // ===========================
+  getApplication() {
+    return this._application;
+  }
+
+  setApplication(application) {
+    this._application = application;
+    return application;
+  }
+  // ===========================
+
+  /**
+   *
+   * @param {?boolean} value
+   * @returns {boolean}
+   */
+  staticPosition(value = null) {
+    if(value  !== null) {
+      this._staticPosition = value;
+    }
+    return this._staticPosition;
+  }
+
+  moveSpeed(value = null) {
+    if(value !== null) {
+      this._moveSpeed = value;
+    }
+
+    return this._moveSpeed;
+  }
+
+  isMoving(value = null) {
+    if(value !== null) {
+      this._moving = value;
+    }
+
+    return this._moving;
+  }
+
+
+  update() {
+    if(this.isMoving() && this.y() < this._targetY) {
+      this.direction = 'down';
+      this.y(this.y() + this.moveSpeed());
+    }
+    else if(this.isMoving() && this.x() < this._targetX) {
+      this.direction = 'right';
+      this.x(this.x() + this.moveSpeed());
+    }
+
+    if(this.parent) {
+      this.parent.updateCollisionBoundingBox(this);
+    }
+
+    if(this.needUpdate() || this.isMoving()) {
+      if(
+        Math.abs(this._targetX - this.x()) <= this._targetHitZone
+        && Math.abs(this._targetY - this.y()) <= this._targetHitZone
+        && this.isMoving()
+      ) {
+        this._moving = false;
+        this._onMoveEnd(this);
+      }
+
+      this.getRenderer().update();
+      this.getChildren().forEach(element => {
+        element.update();
+      });
+    }
+    this.needUpdate(false);
+  }
+
+
+
+  update2() {
+    if(this.needUpdate()) {
+      this.getRenderer().update();
+
+      this.getChildren().forEach(element => {
+        element.update();
+      });
+
+    }
+    this.needUpdate(false);
+  }
+
+
+  // ===========================
+
   relativeTo(element = null) {
     if(element !== null) {
       this._relativeTo = element;
     }
-    
+
     return this._relativeTo;
   }
 
@@ -128,6 +270,7 @@ class Element
 
   createElement(x = null, y = null, width = null, height = null) {
     const element = new Element(x, y, width, height);
+    element.setApplication(this.getApplication());
     this.children.push(element);
     element.setParent(this);
     element.relativeTo(this);
@@ -135,7 +278,7 @@ class Element
   }
 
   addElement(x = 0, y = 0, element) {
-
+    element.setApplication(this.getApplication());
     this.children.push(element);
     element.setParent(this);
     element.relativeTo(this);
@@ -144,7 +287,7 @@ class Element
     element.y(y);
 
     this.updateCollisionBoundingBox(element);
-    
+
     if(this.parent) {
       this.parent.updateCollisionBoundingBox(this);
     }
@@ -153,14 +296,17 @@ class Element
     return element;
   }
 
-  createCollisionZone(x = null, y = null, width = null, height = null) {
+  createCollisionZone(x = null, y = null, width = null, height = null, type = 'collision') {
 
     const zone = new BoundingBox(this);
     zone.x0(x);
     zone.y0(y);
     zone.width(width);
     zone.height(height);
-    this.collisionZones.push(zone);
+
+
+    // this.collisionZones.push(zone);
+    this.collisionZones[type].push(zone);
 
     this.collisionBoundingBox.updateWithBoundingBox(zone);
 
@@ -169,6 +315,11 @@ class Element
     }
 
     return zone;
+  }
+
+
+  createTriggerZone(x = null, y = null, width = null, height = null) {
+    return this.createCollisionZone(x, y, width, height, 'trigger');
   }
 
   /**
@@ -193,64 +344,74 @@ class Element
     return this._needUpdate;
   }
 
+  // ===========================
 
-  // =========================== 
-
-  collided(value = null) {
+  collided(value = null, type = 'collision') {
 
     if(value !== null) {
-      if(value !== this._collided) {
-        this._collided = value;
+      if(value !== this._collided[type]) {
+        this._collided[type] = value;
         if(value === false) {
-          this.collisionZones.forEach(zone => {
-            zone.collided(false);
+          this.collisionZones[type].forEach(zone => {
+            zone.collided(false, type);
           });
         }
 
         if(this.parent) {
-          this.parent.collided(value);
+          this.parent.collided(value, type);
         }
         this.needUpdate(true);
       }
     }
 
-    return this._collided;
+    return this._collided[type];
   }
 
-  getCollision(element) {
+  getTrigger(element) {
+    return this.getCollision(element, 'trigger');
+  }
+
+
+  getCollision(element, type = 'collision') {
 
     if(element === this) {
       return false;
     }
 
-   
     const boundingBoxCollided = this.getCollisionBoundingBox().isCollided(
       element.getCollisionBoundingBox()
     );
 
     if(boundingBoxCollided) {
+      const collided = element.collisionZones[type].reduce((collided, zone) => {
 
-      const collided = element.collisionZones.reduce((collided, zone) => {
-
-        const isCollided = this.getCollisionBoundingBox().isCollided(zone);
+        const isCollided = this.getCollisionBoundingBox().isCollided(zone, type);
         if(!collided) {
           collided = isCollided;
         }
-        zone.collided(isCollided);
+        zone.collided(isCollided, type);
 
         return collided
       }, false);
 
       if(collided) {
-        element.collided(true);
-        this.collided(true);
+
+        if(!element.collided(null, type)) {
+          this.collidedWith[type].push(element);
+          this.handle(type, {
+            element: this,
+            target: element,
+          });
+        }
+
+        element.collided(true, type);
+        this.collided(true, type);
+
         return [element];
       }
 
-
       const childCollisions = element.getChildren().map(child => {
-        const result = this.getCollision(child);
-
+        const result = this.getCollision(child, type);
         return result;
       }).filter(Boolean).reduce((accumulator, element) => element, []);
 
@@ -258,40 +419,34 @@ class Element
         return childCollisions;
       }
     }
-
-    element.clearCollision();
-    this.clearCollision();
+    element.clearCollision(type);
 
     return false;
   }
 
-  clearCollision() {
-    this.collided(false);
-    this.getCollisionZones().forEach(zone => {
+  clearCollision(type = 'collision') {
+
+    this.collidedWith[type].forEach(element => {
+      this.handle(type + '.end', {
+        element: this,
+        target: element,
+      });
+    });
+    this.collidedWith[type] = [];
+
+    this.collided(false, type);
+    this.getCollisionZones(type).forEach(zone => {
       if(zone.dom) {
-        zone.collided(false);
+        zone.collided(false, type);
       }
 
     });
     this.getChildren().forEach(child => {
-      child.clearCollision();
+      child.clearCollision(type);
     });
   }
 
   // ===========================
-
-  update() {
-    if(this.needUpdate()) {
-      this.getRenderer().update();
-
-      this.getChildren().forEach(element => {
-        element.update();
-      });
-
-    }
-
-    this.needUpdate(false);
-  }
 
   /**
    * @param {Element} element
@@ -320,8 +475,8 @@ class Element
     return children;
   }
 
-  getCollisionZones() {
-    return this.collisionZones;
+  getCollisionZones(type = 'collision') {
+    return this.collisionZones[type];
   }
 
   getCollisionBoundingBox() {
@@ -346,11 +501,11 @@ class Element
    * @returns {Boolean}
    */
   isRendered() {
-    return this.redered;
+    return this.rendered;
   }
 
   /**
-   * @returns 
+   * @returns
    */
   render() {
     this.rendered = true;
@@ -369,3 +524,5 @@ class Element
     return this.renderer.renderCollisionZones();
   }
 }
+
+

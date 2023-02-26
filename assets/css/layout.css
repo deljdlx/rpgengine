@@ -89,7 +89,6 @@ html, body {
 
 
 .frame-00 {
-
     box-sizing: border-box;
     border: 15px solid transparent;
     border-image-source: url("../images/ui/frame-00.png");;

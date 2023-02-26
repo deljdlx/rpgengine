@@ -14,6 +14,7 @@ class Area extends Element
   constructor(board, x, y) {
     super(x, y, board.width(), board.height());
     this.board = board;
+    this.setApplication(board.getApplication());
     this.renderer = new AreaRenderer(this);
   }
 }

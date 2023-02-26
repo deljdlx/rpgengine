@@ -1,8 +1,14 @@
 class Viewport
 {
+
+  _application;
+
   direction;
   moving = 0;
+
+
   interval = 4;
+  _timestamp;
 
 
   /**
@@ -12,7 +18,8 @@ class Viewport
 
   loop;
 
-  speed = 2;
+  // pixels per second
+  speed = 300;
 
   /**
    * @type {Board}
@@ -35,13 +42,15 @@ class Viewport
    */
   character;
 
-  constructor(container, board, x = 0, y = 0, width = 500, height = 500)
+  constructor(application, container, width = 500, height = 500)
   {
+    this._application = application;
+
     this.container = container;
-    this.board = board;
-    this.geometry = new Geometry(x, y);
-    this.geometry.x(x);
-    this.geometry.y(y);
+    this.board = new Board(this);
+    this.geometry = new Geometry(0, 0);
+    this.geometry.x(0);
+    this.geometry.y(0);
     this.geometry.width(width);
     this.geometry.height(height);
     this.renderer = new ViewportRenderer(this);
@@ -49,6 +58,12 @@ class Viewport
     this.character = new Character();
     this.character.x(this.width() / 2);
     this.character.y(this.height() / 2);
+    this.character.moveSpeed(300);
+    this.character.setApplication(this.getApplication());
+  }
+
+  getApplication() {
+    return this._application;
   }
 
   getCharacter(){
@@ -128,15 +143,22 @@ class Viewport
   }
 
   tick() {
-    this.update();
-    this.loop = setTimeout(() => {
+    requestAnimationFrame((timestamp) => {
+      this.update(timestamp);
       this.tick();
-    }, this.interval)
+    })
   }
 
   // ===========================
 
-  update() {
+  update(timestamp) {
+    const increment = Math.round((timestamp - this._timestamp) * this.character.moveSpeed() / 1000);
+
+    if(increment < 1) {
+      return;
+    }
+
+    this._timestamp = timestamp;
 
     if(this.moving === 0) {
       return;
@@ -145,12 +167,21 @@ class Viewport
     this.loadAreasFromCurrentPosition();
     this.freeAreasFromCurrentPosision();
 
+    this.updateCharacter(increment);
+
+
+    this.getBoard().update();
+    this.renderer.update();
+    this.character.update();
+  }
+
+  updateCharacter(increment) {
     const saveGeometry = this.geometry.clone();
     switch(this.direction) {
-      case 'up': { this.geometry.add('y', -this.speed); break; }
-      case 'down': { this.geometry.add('y', this.speed); break; }
-      case 'left': { this.geometry.add('x', -this.speed); break; }
-      case 'right': { this.geometry.add('x', this.speed); break; }
+      case 'up': { this.geometry.add('y', -increment); break; }
+      case 'down': { this.geometry.add('y', increment); break; }
+      case 'left': { this.geometry.add('x', -increment); break; }
+      case 'right': { this.geometry.add('x', increment); break; }
     }
 
     this.character.x(this.x() + this.width() / 2);
@@ -158,16 +189,19 @@ class Viewport
 
     let collisions = this.character.getCollision(this.board);
 
-
     if(collisions.length) {
       this.geometry = saveGeometry;
       this.character.x(this.x() + this.width() / 2);
       this.character.y(this.y() + this.height() / 2);
     }
+    else {
+      this.character.clearCollision();
+    }
 
-    this.getBoard().update();
-    this.renderer.update();
-    this.character.update();
+    let triggers = this.character.getTrigger(this.board);
+    if(!triggers.length) {
+      this.character.clearCollision('trigger');
+    }
   }
 
   render() {

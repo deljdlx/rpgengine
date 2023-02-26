@@ -50,14 +50,14 @@ class ViewportRenderer
     const left = -this._viewport.x();
     const top = -this._viewport.y();
 
+    // -1 : zindex fine tuning
     const zIndex =
       (
         this._board.height() +
         (
-          this._viewport.getCharacter().y() % this._board.height()
+          (this._viewport.getCharacter().y()) % this._board.height() + (this._viewport.getCharacter().height() - 1)
         )
       ) % this._board.height()
-      + this._viewport.getCharacter().height()
     ;
 
     this._viewport.getCharacter().getRenderer().getDom().style.zIndex = zIndex;

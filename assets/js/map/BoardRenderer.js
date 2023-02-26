@@ -23,21 +23,21 @@ class BoardRenderer extends Renderer
 
   update() {
     super.update();
-    // this.renderAreas();
+    this.renderAreas();
   }
 
   renderDebug() {
     this.board.renderCollisionZones();
+
     const matrix = this.board.getAreas();
     for(let x in matrix) {
       const areas = matrix[x];
       for(let y in areas) {
         const area = areas[y];
         if(!area.isRendered()) {
+
           area.renderCollisionZones();
-
-          // area.renderBoundingBox();
-
+          area.renderBoundingBox();
         }
       }
     }
@@ -59,6 +59,7 @@ class BoardRenderer extends Renderer
             this.dom.append(element.render());
             element.getAllChildren().forEach(child => {
               this.dom.append(child.render());
+              // this.dom.append(child.getDom());
             })
           });
         }
