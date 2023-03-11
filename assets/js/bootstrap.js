@@ -51,7 +51,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const board = viewport.getBoard();
   await board.initializeAsync();
 
-  board.getAreaAt(0, 0).addElement(0, 300, new Flower00());
+  const flower = board.getAreaAt(0, 0).addElement(0, 300, new Flower00());
+  flower.addEventListener('trigger', () => {
+    console.log('%cbootstrap.js :: 56 =============================', 'color: #f00; font-size: 1rem');
+    console.log("ICI");
+  });
+
+  console.log('%cbootstrap.js :: 55 =============================', 'color: #f00; font-size: 1rem');
+  console.log(flower);
 
 
   viewport.render();

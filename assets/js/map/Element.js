@@ -60,10 +60,6 @@ class Element
    */
   renderer;
 
-
-
-
-
   /**
    * @type {Boolean}
    */
@@ -85,11 +81,15 @@ class Element
   _moveSpeed = 100;
 
 
-  listeners = {};
+  _listeners = {};
 
 
   constructor(x = null, y = null, width = null, height = null)
   {
+
+    this._application = Application.mainInstance;
+
+
     this.geometry = new Geometry();
     this.boundingBox = new BoundingBox(this);
     this.collisionBoundingBox = new BoundingBox(this);
@@ -106,20 +106,21 @@ class Element
   // ===========================
 
   addEventListener(name, callback) {
-    if(typeof(this.listeners[name]) === 'undefined') {
-      this.listeners[name] = [];
+    if(typeof(this._listeners[name]) === 'undefined') {
+      this._listeners[name] = [];
     }
-    this.listeners[name].push(callback);
+    this._listeners[name].push(callback);
 
-    return this.listeners[name].length - 1;
+    return this._listeners[name].length - 1;
   }
 
   handle(name, data = {}) {
-    if(typeof(this.listeners[name]) !== 'undefined') {
-      this.listeners[name].map(callback => {
+    if(typeof(this._listeners[name]) !== 'undefined') {
+      this._listeners[name].map(callback => {
         callback(data);
       });
     }
+
     this.getApplication().handle(name, data);
   }
 
@@ -399,6 +400,10 @@ class Element
         if(!element.collided(null, type)) {
           this.collidedWith[type].push(element);
           this.handle(type, {
+            element: this,
+            target: element,
+          });
+          element.handle(type, {
             element: this,
             target: element,
           });

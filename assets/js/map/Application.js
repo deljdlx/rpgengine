@@ -7,6 +7,7 @@ class Application
 
 
   constructor(selector, width, height) {
+    Application.mainInstance = this;
     this._viewport = new Viewport(
       this,
       document.querySelector(selector),
