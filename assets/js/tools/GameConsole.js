@@ -1,11 +1,11 @@
 class GameConsole
 {
 
-  viewport;
+  application;
   container;
 
-  constructor(viewport, selector) {
-    this.viewport = viewport;
+  constructor(application, selector) {
+    this.application = application;
     this.container = document.querySelector(selector);
   }
 

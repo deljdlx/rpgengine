@@ -81,6 +81,7 @@ class Element
   _moveSpeed = 100;
 
 
+  _eventPrefix = 'element.';
   _listeners = {};
 
 
@@ -399,11 +400,16 @@ class Element
 
         if(!element.collided(null, type)) {
           this.collidedWith[type].push(element);
-          this.handle(type, {
+
+          // console.log('%cElement.js :: 403 =============================', 'color: #f00; font-size: 1rem');
+          // console.log("ICI");
+
+          this.handle(this._eventPrefix + type, {
             element: this,
             target: element,
           });
-          element.handle(type, {
+
+          element.handle(this._eventPrefix + type, {
             element: this,
             target: element,
           });
@@ -432,7 +438,7 @@ class Element
   clearCollision(type = 'collision') {
 
     this.collidedWith[type].forEach(element => {
-      this.handle(type + '.end', {
+      this.handle('element.' + type + '.end', {
         element: this,
         target: element,
       });

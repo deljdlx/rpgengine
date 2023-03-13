@@ -42,6 +42,9 @@ class Viewport
    */
   character;
 
+  _listeners = {};
+
+
   constructor(application, container, width = 500, height = 500)
   {
     this._application = application;
@@ -61,6 +64,29 @@ class Viewport
     this.character.moveSpeed(300);
     this.character.setApplication(this.getApplication());
   }
+
+  // ===========================
+
+  addEventListener(name, callback) {
+    if(typeof(this._listeners[name]) === 'undefined') {
+      this._listeners[name] = [];
+    }
+    this._listeners[name].push(callback);
+
+    return this._listeners[name].length - 1;
+  }
+
+  handle(name, data = {}) {
+    if(typeof(this._listeners[name]) !== 'undefined') {
+      this._listeners[name].map(callback => {
+        callback(data);
+      });
+    }
+
+    this.getApplication().handle(name, data);
+  }
+
+  // ===========================
 
   getApplication() {
     return this._application;
@@ -177,6 +203,7 @@ class Viewport
 
   updateCharacter(increment) {
     const saveGeometry = this.geometry.clone();
+
     switch(this.direction) {
       case 'up': { this.geometry.add('y', -increment); break; }
       case 'down': { this.geometry.add('y', increment); break; }
@@ -197,6 +224,11 @@ class Viewport
     else {
       this.character.clearCollision();
     }
+
+    this.handle("map.update", {
+      map: this,
+      character: this.character,
+    });
 
     let triggers = this.character.getTrigger(this.board);
     if(!triggers.length) {

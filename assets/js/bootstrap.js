@@ -1,8 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
-
-
-
   const MAP_CONFIGURATION = {
     width: 600,
     height: 400,
@@ -21,21 +18,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   application.registerElement('Woman00', Woman00);
   application.registerElement('Flower00', Flower00);
 
+  
+  const gameConsole = new GameConsole(application, '#game-console');
+  gameConsole.addEntry('Hello world');
 
-  application.addEventListener('collision', (event) => {
-    event.target.getRenderer().getDom().classList.add('collided');
+  application.addEventListener('map.update', (event) => {
+    // console.log(event);
   });
 
-  application.addEventListener('collision.end', (event) => {
+  application.addEventListener('element.collision', (event) => {
+    event.target.getRenderer().getDom().classList.add('collided');
+    gameConsole.addEntry('collision');
+    console.log(event.target);
+  });
+
+  application.addEventListener('element.collision.end', (event) => {
     event.target.getRenderer().getDom().classList.remove('collided');
   });
+ 
 
-
-  application.addEventListener('trigger', (event) => {
+  application.addEventListener('element.trigger', (event) => {
     event.target.getRenderer().getDom().classList.add('collided');
   });
 
-  application.addEventListener('trigger.end', (event) => {
+  application.addEventListener('element.trigger.end', (event) => {
     event.target.getRenderer().getDom().classList.remove('collided');
   });
 

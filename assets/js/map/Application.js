@@ -55,7 +55,7 @@ class Application
 
 
   async fetchArea(x, y) {
-    return fetch('http://localhost/rpgengine/backend/areas/0_0.php').then(response => response.json());
+    return fetch('./backend/areas/0_0.php').then(response => response.json());
   }
 }
 
