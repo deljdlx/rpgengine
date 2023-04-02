@@ -45,8 +45,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     event.target.getRenderer().getDom().classList.remove('collided');
   });
 
-
-
   const viewport = new Viewport(
     application,
     document.querySelector('#viewport'),
@@ -55,19 +53,44 @@ document.addEventListener('DOMContentLoaded', async () => {
   );
 
   const board = viewport.getBoard();
-  await board.initializeAsync();
+  await board.initializeAsync((area) => {
+    // console.log('%cbootstrap.js :: 57 =============================', 'color: #f00; font-size: 1rem');
+    // console.log("INITIALIZED");
+    // console.log(area);
+    // console.log(area.getChildren());
+  });
 
   const flower = board.getAreaAt(0, 0).addElement(0, 300, new Flower00());
-  flower.addEventListener('trigger', () => {
+  flower.addEventListener('element.trigger', () => {
     console.log('%cbootstrap.js :: 56 =============================', 'color: #f00; font-size: 1rem');
     console.log("ICI");
   });
 
-  console.log('%cbootstrap.js :: 55 =============================', 'color: #f00; font-size: 1rem');
-  console.log(flower);
+
+  flower.addEventListener('element.click', (event) => {
+    console.log('%cbootstrap.js :: 65 =============================', 'color: #f00; font-size: 1rem');
+    console.log('click on flower detected');
+  })
+
+
+
+  const woman = board.getAreaAt(0, 0).getChildByName('woman-00');
+  
+  woman.addEventListener('element.collision', (event) => {
+    gameConsole.addEntry('Hello my friend !');
+    woman.quickReaction('Hello my friend !');
+  });
+  
+
+  woman.addEventListener('element.collision.end', (event) => {
+    console.log('%cbootstrap.js :: 86 =============================', 'color: #f00; font-size: 1rem');
+    console.log("END COLLISION");  
+    woman.clearQuickReaction();
+  });
 
 
   viewport.render();
+  // viewport.renderDebug();
   viewport.run();
 
 

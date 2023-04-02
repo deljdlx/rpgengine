@@ -49,4 +49,18 @@ class Character extends Element
   setDirection(direction) {
     this.direction = direction;
   }
+
+  quickReaction(content) {
+    this.getRenderer()._domQuickReaction.innerHTML = content;
+    this.getRenderer()._domQuickReaction.classList.add('quickReaction--enable');
+    return this;
+  }
+
+  clearQuickReaction() {
+    this.getRenderer()._domQuickReaction.innerHTML = '';
+    this.getRenderer()._domQuickReaction.classList.remove('quickReaction--enable');
+    console.log('%cCharacter.js :: 62 =============================', 'color: #f00; font-size: 1rem');
+    console.log("ICI");
+    return this;
+  }
 }

@@ -18,29 +18,32 @@ class Board extends Element
     }
   }
 
-  async initializeAsync() {
+  async initializeAsync(callback) {
     let promises = []
     for(let x = -1 ; x < 2 ; x++) {
       for(let y = -1 ; y < 2 ; y++) {
-        promises.push(this.loadAreaAsync(x, y));
+        promises.push(this.loadAreaAsync(x, y, callback));
       }
     }
 
     return Promise.all(promises);
   }
 
-  async loadAreaAsync(x, y) {
+  async loadAreaAsync(x, y, callback) {
     if(!this.areaExistsAt(x, y)) {
 
       const area = this.createAreaAt(x, y);
       return this._application.fetchArea(x, y).then(data => {
         data.forEach(descriptor => {
+          
           area.addElement(
             descriptor.x,
             descriptor.y,
             this._application.instanciate(descriptor.element),
+            descriptor.name,
           );
         });
+        callback(area);
         return area;
       });
     }

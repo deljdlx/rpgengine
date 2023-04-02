@@ -55,6 +55,8 @@ class Element
    */
   children = [];
 
+  childrenByName = {};
+
   /**
    * @type {Renderer}
    */
@@ -98,6 +100,13 @@ class Element
     this.renderer = new Renderer(this);
     this.dom = this.renderer.getDom();
 
+    this.dom.addEventListener('click', (event) => {
+
+      this.handle('element.click', {
+        element: this,
+      });
+    })
+
     this.x(x);
     this.y(y);
     this.width(width);
@@ -116,6 +125,10 @@ class Element
   }
 
   handle(name, data = {}) {
+    console.log('%cElement.js :: 131 =============================', 'color: #f00; font-size: 1rem');
+    console.log(name);
+    console.log(this);
+    console.log(this._listeners);
     if(typeof(this._listeners[name]) !== 'undefined') {
       this._listeners[name].map(callback => {
         callback(data);
@@ -279,9 +292,11 @@ class Element
     return element;
   }
 
-  addElement(x = 0, y = 0, element) {
+  addElement(x = 0, y = 0, element, name) {
     element.setApplication(this.getApplication());
     this.children.push(element);
+    this.childrenByName[name] = element;
+
     element.setParent(this);
     element.relativeTo(this);
 
@@ -443,6 +458,13 @@ class Element
         target: element,
       });
     });
+
+    this.collidedWith[type].forEach(element => {
+      element.handle('element.' + type + '.end', {
+        element: element,
+        target: this,
+      });
+    });
     this.collidedWith[type] = [];
 
     this.collided(false, type);
@@ -470,6 +492,13 @@ class Element
 
   getChildren() {
     return this.children;
+  }
+
+  getChildByName(name) {
+    if(typeof(this.childrenByName[name]) ==='undefined') {
+      throw new Exception('No element with name ' + name);
+    }
+    return this.childrenByName[name];
   }
 
   getAllChildren() {

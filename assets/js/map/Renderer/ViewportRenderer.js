@@ -37,7 +37,7 @@ class ViewportRenderer
     this.domCharacter = this._viewport.getCharacter().getRenderer().render();
     this._viewport.getBoard().getRenderer().getDom().append(this.domCharacter);
 
-    this.renderDebug();
+    // this.renderDebug();
 
   }
 
@@ -46,7 +46,7 @@ class ViewportRenderer
     this._viewport.getCharacter().getRenderer().renderCollisionZones();
   }
 
-  update(){
+  update() {
     const left = -this._viewport.x();
     const top = -this._viewport.y();
 

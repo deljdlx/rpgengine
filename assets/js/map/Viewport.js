@@ -237,7 +237,11 @@ class Viewport
   }
 
   render() {
-    return this.renderer.render(this.container);
+    return this.renderer.render();
+  }
+
+  renderDebug() {
+    return this.renderer.renderDebug();
   }
 
   // ===========================
