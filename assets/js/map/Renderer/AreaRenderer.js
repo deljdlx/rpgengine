@@ -10,7 +10,7 @@ class AreaRenderer extends Renderer
     dom.style.height = this.getElement().height() + 'px';
     dom.style.left = this.getElement().x() + 'px';
     dom.style.top = this.getElement().y() + 'px';
-    
+
     return dom;
   }
 }

@@ -50,19 +50,28 @@ class BoardRenderer extends Renderer
       for(let y in areas) {
         const area = areas[y];
         if(!area.isRendered()) {
-
           this.dom.append(area.render());
+        }
 
-          const areaElements = area.getChildren();
-          areaElements.forEach(element => {
+        const areaElements = area.getChildren();
+        areaElements.forEach(element => {
+          if(!element.isRendered()) {
             element.relativeTo(area);
-            this.dom.append(element.render());
+
+            const elementDom = element.render();
+            if(element.getAllChildren().length) {
+              elementDom.classList.add('map-element--group');
+            }
+            this.dom.append(elementDom);
+
+
             element.getAllChildren().forEach(child => {
               this.dom.append(child.render());
               // this.dom.append(child.getDom());
-            })
-          });
-        }
+            });
+          }
+        });
+
       }
     }
   }

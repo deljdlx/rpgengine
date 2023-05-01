@@ -5,14 +5,19 @@ class Application
   _viewport;
   listeners = {};
 
+  apiGetAreaUrl = './backend/index.php';
 
+
+  /**
+   * @param {String} selector
+   * @param {int} width
+   * @param {int} height
+   */
   constructor(selector, width, height) {
     Application.mainInstance = this;
     this._viewport = new Viewport(
       this,
       document.querySelector(selector),
-      0,
-      0,
       width,
       height,
     );
@@ -39,6 +44,10 @@ class Application
     this._elementsClasses[name] = constructorName;
   }
 
+  getRegisteredElements() {
+    return Object.keys(this._elementsClasses);
+  }
+
   instanciate(name) {
     return new this._elementsClasses[name];
   }
@@ -55,7 +64,10 @@ class Application
 
 
   async fetchArea(x, y) {
-    return fetch('./backend/areas/0_0.php').then(response => response.json());
+    // JDLX_TODO
+
+    const data = `&x=${x}&y=${y}`;
+    return fetch(this.apiGetAreaUrl + '?' + data).then(response => response.json());
   }
 }
 

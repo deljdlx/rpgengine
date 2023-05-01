@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
   const MAP_CONFIGURATION = {
-    width: 600,
-    height: 400,
+    width: 900,
+    height: 600,
   }
 
   const application = new Application(
@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     MAP_CONFIGURATION.height,
   );
 
+
   application.registerElement('FenceGroup00', FenceGroup00);
   application.registerElement('House00', House00);
   application.registerElement('House01', House01);
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   application.registerElement('Woman00', Woman00);
   application.registerElement('Flower00', Flower00);
 
-  
+
   const gameConsole = new GameConsole(application, '#game-console');
   gameConsole.addEntry('Hello world');
 
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   application.addEventListener('element.collision.end', (event) => {
     event.target.getRenderer().getDom().classList.remove('collided');
   });
- 
+
 
   application.addEventListener('element.trigger', (event) => {
     event.target.getRenderer().getDom().classList.add('collided');
@@ -45,12 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     event.target.getRenderer().getDom().classList.remove('collided');
   });
 
-  const viewport = new Viewport(
-    application,
-    document.querySelector('#viewport'),
-    MAP_CONFIGURATION.width,
-    MAP_CONFIGURATION.height,
-  );
+  const viewport = application.getViewport();
 
   const board = viewport.getBoard();
   await board.initializeAsync((area) => {
@@ -75,16 +71,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
   const woman = board.getAreaAt(0, 0).getChildByName('woman-00');
-  
+
   woman.addEventListener('element.collision', (event) => {
     gameConsole.addEntry('Hello my friend !');
     woman.quickReaction('Hello my friend !');
   });
-  
+
 
   woman.addEventListener('element.collision.end', (event) => {
     console.log('%cbootstrap.js :: 86 =============================', 'color: #f00; font-size: 1rem');
-    console.log("END COLLISION");  
+    console.log("END COLLISION");
     woman.clearQuickReaction();
   });
 

@@ -1,0 +1,21 @@
+[{
+    "name": "house-00",
+    "x": 10,
+    "y": 0,
+    "element": "House01"
+}, {
+    "name": "fountain-00",
+    "x": 200,
+    "y": 360,
+    "element": "Fountain00"
+}, {
+    "name": "woman-00",
+    "x": 50,
+    "y": 210,
+    "element": "Woman00"
+}, {
+    "name": "fence-group-00",
+    "x": 250,
+    "y": 0,
+    "element": "FenceGroup00"
+}]

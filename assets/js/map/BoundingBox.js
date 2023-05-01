@@ -19,6 +19,10 @@ class BoundingBox
   constructor(element = null) {
     if(element) {
       this._element = element
+      this._x0 = element.x();
+      this._y0 = element.y();
+      this._x1 = element.x() + element.width();
+      this._y1 = element.y() + element.height();
     }
   }
 

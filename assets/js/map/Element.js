@@ -94,24 +94,45 @@ class Element
 
 
     this.geometry = new Geometry();
-    this.boundingBox = new BoundingBox(this);
+    this.setRenderer(new Renderer(this));
+
+    // emtpy collision bouding box
     this.collisionBoundingBox = new BoundingBox(this);
 
-    this.renderer = new Renderer(this);
-    this.dom = this.renderer.getDom();
-
-    this.dom.addEventListener('click', (event) => {
-
-      this.handle('element.click', {
-        element: this,
-      });
-    })
 
     this.x(x);
     this.y(y);
     this.width(width);
     this.height(height);
+
+    this.boundingBox = new BoundingBox(this);
+
+
   }
+
+  setRenderer(renderer) {
+    this.renderer = renderer;
+    this.dom = this.renderer.getDom();
+    this.registerEvents();
+
+    return this;
+  }
+
+  getDom() {
+    return this.dom;
+  }
+
+  registerEvents() {
+    this.dom.addEventListener('click', (event) => {
+      this.handle('element.click', {
+        element: this,
+        areaX: event.offsetX,
+        areaY: event.offsetY,
+        originalEvent: event,
+      });
+    })
+  }
+
 
   // ===========================
 
@@ -125,10 +146,10 @@ class Element
   }
 
   handle(name, data = {}) {
-    console.log('%cElement.js :: 131 =============================', 'color: #f00; font-size: 1rem');
-    console.log(name);
-    console.log(this);
-    console.log(this._listeners);
+    // console.log('%cElement.js :: 131 =============================', 'color: #f00; font-size: 1rem');
+    // console.log(name);
+    // console.log(this);
+    // console.log(this._listeners);
     if(typeof(this._listeners[name]) !== 'undefined') {
       this._listeners[name].map(callback => {
         callback(data);
@@ -283,12 +304,18 @@ class Element
     return this.y();
   }
 
-  createElement(x = null, y = null, width = null, height = null) {
-    const element = new Element(x, y, width, height);
+  createElement() {
+    const element = new Element();
     element.setApplication(this.getApplication());
     this.children.push(element);
+    // JDLX_TODO handle childrenByName
+
     element.setParent(this);
     element.relativeTo(this);
+
+
+    // this.updateBoudingBox(element);
+
     return element;
   }
 
@@ -304,6 +331,7 @@ class Element
     element.y(y);
 
     this.updateCollisionBoundingBox(element);
+    this.updateBoudingBox(element);
 
     if(this.parent) {
       this.parent.updateCollisionBoundingBox(this);
@@ -347,6 +375,26 @@ class Element
     if(this.parent) {
       this.parent.updateCollisionBoundingBox(this);
     }
+  }
+
+  updateBoudingBox(element) {
+
+    const boundingBox = new BoundingBox();
+    boundingBox.x0(element.x());
+    boundingBox.y0(element.y());
+
+    boundingBox.x1(element.x() + element.getBoundingBox().width());
+    boundingBox.y1(element.y() + element.getBoundingBox().height());
+
+    // console.log('%cElement.js :: 383 =============================', 'color: #f00; font-size: 1rem');
+    // console.log(boundingBox);
+
+    this.boundingBox.updateWithBoundingBox(boundingBox);
+    if(this.parent) {
+      this.parent.updateBoudingBox(this);
+    }
+
+
   }
 
   // ===========================
@@ -549,6 +597,7 @@ class Element
    */
   render() {
     this.rendered = true;
+    // this.renderBoundingBox();
     return this.renderer.render();
   }
 

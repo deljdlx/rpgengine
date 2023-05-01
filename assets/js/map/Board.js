@@ -35,7 +35,7 @@ class Board extends Element
       const area = this.createAreaAt(x, y);
       return this._application.fetchArea(x, y).then(data => {
         data.forEach(descriptor => {
-          
+
           area.addElement(
             descriptor.x,
             descriptor.y,
@@ -99,7 +99,7 @@ class Board extends Element
     if(typeof(this.areas[x][y]) === 'undefined') {
       this.areas[x][y] = {};
     }
-    const area = new Area(this, 0 , 0);
+    const area = new Area(this, x , y);
     this.areas[x][y] = area;
     this.addElement(x * this.width(), y * this.height(), area);
     return this.areas[x][y];

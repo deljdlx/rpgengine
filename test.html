@@ -14,49 +14,39 @@
 
 
 
-
     <link rel="stylesheet" href="assets/css/_variables.css">
-
     <link rel="stylesheet" href="assets/css/layout.css">
-
     <link rel="stylesheet" href="assets/css/map.css">
+
+    <!--
+    <link rel="stylesheet" href="assets/css/layout.css">
     <link rel="stylesheet" href="assets/css/map-debug.css">
-
-
-    <style>
+    //-->
 
 
 
-    </style>
 </head>
 <body>
 
-    <div id="layout" style="">
-        <div id="top-bar"  class="frame-00">
-            <h1>DelJdlx garden</h1>
+    <div id="layout" style="display: flex; flex-direction:column">
+        <div>
+            HEADER
         </div>
+        <div style="position: relative; display: flex">
+            <div class="frame-00" style="width: 300px">
+                <div id="game-console">
 
-        <div id="main" class="">
-            <div style="width: 300px;" class="frame-00">
-                <label>Debug<input type="checkbox" id="debug-switch"/></label>
+                </div>
             </div>
-
-            <div style="position: relative" class="frame-00">
-                <div class="viewport"></div>
-            </div>
-
-            <div id="right-panel" style="width: 300px;" class="frame-00">
-                <div id="console"></div>
-            </div>
-
+            <div id="viewport" class="frame-00"></div>
         </div>
-        <div id="bottom-panel" class="frame-00" style="flex-grow: 1">
-            <div id="bottom-panel__content"></div>
-        </div>
+        <div class="frame-00">FOOTER</div>
     </div>
 
-    <!-- ==================================== -->
 
+
+
+    <!-- ==================================== -->
     <template id="chat-entry">
         <div class="chat-entry">
             <div class="frame-00 chat-entry__avatar-container">
@@ -66,56 +56,64 @@
         </div>
     </template>
 
+
+    <!--
+    <div id="light-test"></div>
+    // -->
+
+
     <!-- ==================================== -->
 
-    <script src="assets/js/tools/GameConsole.js"></script>
-
-    <script src="assets/js/map/Viewport.js"></script>
-    <script src="assets/js/map/Layer.js"></script>
 
 
-    <script src="assets/js/map/Map.js"></script>
 
-
-    <script src="assets/js/map/AreaDescriptor.js"></script>
-
-    <script src="assets/js/map/MapArea.js"></script>
+    <script src="assets/js/map/Application.js"></script>
 
 
     <script src="assets/js/map/Coordinates.js"></script>
+    <script src="assets/js/map/Geometry.js"></script>
+    <script src="assets/js/map/BoundingBox.js"></script>
+    <script src="assets/js/map/Element.js"></script>
+    <script src="assets/js/map/Board.js"></script>
+    <script src="assets/js/map/Area.js"></script>
 
-    <script src="assets/js/map/MapElement.js"></script>
-    <script src="assets/js/map/MapElementGroup.js"></script>
-    <script src="assets/js/map/ElementDescriptor.js"></script>
-
-    <script src="assets/js/map/Zone.js"></script>
-
-
-    <script src="assets/js/map/Elements/Character.js"></script>
-    <script src="assets/js/map/MainCharacter.js"></script>
+    <script src="assets/js/map/Viewport.js"></script>
 
 
-    <script src="assets/js/map/Elements/Ground/GroundConcrete00.js"></script>
+    <script src="assets/js/map/Renderer/Renderer.js"></script>
+    <script src="assets/js/map/Renderer/BoardRenderer.js"></script>
+    <script src="assets/js/map/Renderer/AreaRenderer.js"></script>
+    <script src="assets/js/map/Renderer/ViewportRenderer.js"></script>
+    <script src="assets/js/map/Renderer/CharacterRenderer.js"></script>
+
+    <script src="assets/js/map/Character.js"></script>
+
+    <script src="assets/js/map/Elements/CharacterBases/Woman00.js"></script>
+
+    <script src="assets/js/map/Elements/House00.js"></script>
+    <script src="assets/js/map/Elements/House01.js"></script>
+
+
+    <script src="assets/js/map/Elements/Ground00.js"></script>
 
     <script src="assets/js/map/Elements/Tree00.js"></script>
-    <script src="assets/js/map/Elements/House00.js"></script>
-    <script src="assets/js/map/Elements/Flower.js"></script>
-    <script src="assets/js/map/Elements/Flower00.js"></script>
-    <script src="assets/js/map/Elements/Flower01.js"></script>
-    <script src="assets/js/map/Elements/Flower02.js"></script>
-    <script src="assets/js/map/Elements/SunFlower00.js"></script>
+    <script src="assets/js/map/Elements/Sunflower00.js"></script>
+    <script src="assets/js/map/Elements/Flowers/Flower00.js"></script>
+
+
     <script src="assets/js/map/Elements/Fence00H.js"></script>
     <script src="assets/js/map/Elements/Fence00V.js"></script>
     <script src="assets/js/map/Elements/Fountain00.js"></script>
-    <script src="assets/js/map/Elements/Sign00.js"></script>
-
-    <script src="assets/js/map/Groups/GroupFlowers00.js"></script>
-    <script src="assets/js/map/Groups/GroupHome00.js"></script>
 
 
-    <script src="assets/js/layout/StatusBar.js"></script>
+    <script src="assets/js/map/Elements/FenceGroup00.js"></script>
 
-    <script src="assets/js/application.js"></script>
+    <script src="assets/js/tools/GameConsole.js"></script>
+
+    <script src="assets/js/bootstrap.js"></script>
+
+
+
 
 </body>
 </html>

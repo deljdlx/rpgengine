@@ -16,9 +16,9 @@ class FenceGroup00 extends Element
       fence1.addElement(0, i * 16, new Fence00V());
     }
 
-    const fenceRight = this.createElement(right, 0);
+    const fenceRight = this.createElement();
     for(let i = 0 ; i < 12 ; i++) {
-      fenceRight.addElement(0, i * 16, new Fence00V());
+      fenceRight.addElement(right, i * 16, new Fence00V());
     }
 
     const fence2 = this.createElement(fenceLeft, 0);
@@ -26,9 +26,13 @@ class FenceGroup00 extends Element
       fence2.addElement(i * 16, 12 * 16, new Fence00H());
     }
 
-    const fence3 = this.createElement(fenceLeft + 16 * 8 + 8, 0);
+    const fence3 = this.createElement();
     for(let i = 0 ; i < 7 ; i++) {
-      fence3.addElement(i * 16, 12 * 16, new Fence00H());
+      fence3.addElement(
+        i * 16 + fenceLeft + 16 * 8 + 8,
+        12 * 16,
+        new Fence00H()
+      );
     }
   }
 }

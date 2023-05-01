@@ -17,6 +17,14 @@
   position: absolute;
 }
 
+
+.map-area {
+  position: absolute;
+  outline: dotted #f0f 4px;
+}
+/* ===================================== */
+
+
 .map-element__shadow {
   contain: strict;
   position: absolute;
@@ -49,10 +57,14 @@
   background-color: #fff;
   top: -30px;
   display: none;
+
+  min-width: 150px;
+  padding: 8px;
 }
 
 .map-element.character .quickReaction--enable {
   display: block;
+
 }
 
 /* ===================================== */
@@ -90,11 +102,6 @@
 .map-element__collision-zone.debug {
   position: absolute;
   outline: solid #ff0 10px;
-}
-
-.map-area {
-  position: absolute;
-  outline: dotted #f0f 1px;
 }
 
 

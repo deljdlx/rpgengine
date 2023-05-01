@@ -55,6 +55,7 @@ class Viewport
     this.geometry.x(0);
     this.geometry.y(0);
     this.geometry.width(width);
+
     this.geometry.height(height);
     this.renderer = new ViewportRenderer(this);
 
