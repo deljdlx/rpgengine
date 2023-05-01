@@ -46,9 +46,6 @@ class Renderer
     this.dom = document.createElement('div');
     this.dom.classList.add('map-element');
 
-
-    console.log(element.getAllChildren());
-
     this.domSprite = document.createElement('div');
     this.domSprite.classList.add('map-element__sprite');
     this.dom.append(this.domSprite);

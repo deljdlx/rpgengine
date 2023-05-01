@@ -23,9 +23,5 @@ class House01 extends Element
 
     fence.addElement(170, 0, new Tree00());
     fence.addElement(160, 70, new Tree00());
-
-    console.log('%cHouse01.js :: 28 =============================', 'color: #f00; font-size: 1rem');
-    console.log(fence.boundingBox);
-    console.log(this.boundingBox);
   }
 }

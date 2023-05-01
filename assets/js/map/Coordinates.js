@@ -3,7 +3,7 @@ class Coordinates
   _x;
   _y;
 
-  constructor(x = 0, y = 0) {
+  constructor(x = null, y = null) {
     this._x = x;
     this._y = y;
   }

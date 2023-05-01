@@ -313,9 +313,6 @@ class Element
     element.setParent(this);
     element.relativeTo(this);
 
-
-    // this.updateBoudingBox(element);
-
     return element;
   }
 
@@ -612,6 +609,9 @@ class Element
   renderCollisionZones() {
     return this.renderer.renderCollisionZones();
   }
+
+
+
 }
 
 

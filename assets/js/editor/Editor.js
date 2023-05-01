@@ -7,6 +7,8 @@ class Editor
 
   spritePanel;
 
+  spriteContainers = [];
+
   constructor(application) {
 
     this.application = application;
@@ -16,6 +18,7 @@ class Editor
 
     this.initializeSpritePanel();
     this.initializeEvents();
+    this.initializeMap();
 
   }
 
@@ -29,14 +32,11 @@ class Editor
     const spriteContainer = document.createElement('div');
     spriteContainer.classList.add('editor-sprite-container');
 
-
     const sprite = this.application.instanciate(spriteName);
     const element = sprite.render();
     spriteContainer.style.width = sprite.getBoundingBox().width() + 'px';
     spriteContainer.style.height = sprite.getBoundingBox().height() + 'px';
-
     spriteContainer.append(element);
-
 
     sprite.getAllChildren().forEach(child => {
       element.append(child.render());
@@ -45,14 +45,16 @@ class Editor
 
     spriteContainer.addEventListener('click', () => {
       this.selectedSprite = spriteName;
+      this.spriteContainers.forEach(spriteContainer => {
+        spriteContainer.classList.remove('selected');
+      });
+      spriteContainer.classList.add('selected');
     });
 
+    this.spriteContainers.push(spriteContainer);
     this.spritePanel.append(spriteContainer);
 
   }
-
-
-
 
 
   initializeEvents() {
@@ -66,7 +68,6 @@ class Editor
       const x = event.areaX - sprite.width() / 2;
       const y = event.areaY - sprite.height() / 2;
 
-
       const element = area.addElement(
         x,
         y,
@@ -74,15 +75,37 @@ class Editor
         'foobar',
       );
 
-      console.log(event)
-      console.log(area);
-
-      console.log('%ceditor-bootstrap.js :: 65 =============================', 'color: #f00; font-size: 1rem');
-      console.log(element);
-
       area.getBoard().getRenderer().update();
-      new DraggableElement(element);
+      this.makeElementEditable(element);
+
+      console.log('%cEditor.js :: 81 =============================', 'color: #f00; font-size: 1rem');
+      console.log(area.toJSON());
+      console.log(JSON.stringify(area.toJSON()));
+
     });
+  }
+
+  initializeMap() {
+    const viewport = this.application.getViewport();
+    const board = viewport.getBoard();
+
+    const areas = board.getAreas();
+
+    for(let x in areas) {
+      for(let y in areas[x]) {
+        const area = areas[x][y];
+        console.log(area);
+
+        const elements = area.getChildren();
+        elements.forEach(element => {
+          this.makeElementEditable(element);
+        });
+      }
+    }
+  }
+
+  makeElementEditable(element) {
+    new DraggableElement(element);
   }
 
 

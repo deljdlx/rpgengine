@@ -40,10 +40,30 @@ class Area extends Element
     })
   }
 
+
   /**
    * @returns {Board}
    */
   getBoard() {
     return this.board;
+  }
+
+
+  toJSON() {
+    const data = [];
+
+    for(let name in this.childrenByName) {
+      const element = this.childrenByName[name]
+      const descriptor = {
+        name: name,
+        x: element.x(),
+        y: element.y(),
+        element: element.constructor.name,
+      };
+      data.push(descriptor);
+    }
+
+    return data;
+
   }
 }

@@ -1,6 +1,13 @@
 .editor-sprite-container {
   border: solid 1px #fff;
+  margin: 2px;
 }
+
+.editor-sprite-container.selected {
+  background-color: #fff8;
+  border: solid 2px #0f0;
+}
+
 
 .editor-sprite-container > .map-element {
   position: relative;

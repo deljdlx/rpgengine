@@ -22,7 +22,7 @@ class DraggableElement
     this.draggable.addEventListener('mouseMove', (data) => {
 
 
-      if(!this.element.getAllChildren().length) {
+      if(!this.element.getAllChildren().length && ! this.element.manualZ) {
         const zIndex = parseInt(this.element.getDom().style.top);
         this.element.getDom().style.zIndex = zIndex + this.element.height();
       }
@@ -31,7 +31,10 @@ class DraggableElement
       this.element.getAllChildren().forEach(element => {
         element.getDom().style.left = parseInt(this.element.getDom().style.left) + element.x() + 'px';
         element.getDom().style.top =  parseInt(this.element.getDom().style.top) + element.y() + 'px';
-        element.getDom().style.zIndex = parseInt(element.getDom().style.top) + element.height();
+
+        if(!element.manualZ) {
+          element.getDom().style.zIndex = parseInt(element.getDom().style.top) + element.height();
+        }
       });
     });
 

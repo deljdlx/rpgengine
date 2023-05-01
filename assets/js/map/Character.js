@@ -18,7 +18,7 @@ class Character extends Element
     this.spriteSheetOffsetTop = spriteSheetOffsetTop;
 
     this.createCollisionZone(16, 24, 14, 12);
-    this.renderer = new CharacterRenderer(this);
+    this.setRenderer(new CharacterRenderer(this));
   }
 
   getSpriteSheetOffsetLeft() {

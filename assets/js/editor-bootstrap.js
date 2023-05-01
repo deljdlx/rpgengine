@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
   const MAP_CONFIGURATION = {
-    width: 900,
-    height: 600,
+    width: 1600,
+    height: 1000,
   }
 
   const application = new Application(
@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   application.registerElement('Flower00', Flower00);
   application.registerElement('Tree00', Tree00);
   application.registerElement('Sunflower00', Sunflower00);
+  application.registerElement('Ground00', Ground00);
 
 
 
