@@ -18,7 +18,7 @@ class Draggable {
 
     this.element.addEventListener('mousedown', this.onMouseDown.bind(this));
     document.addEventListener('mousemove', this.onMouseMove.bind(this));
-    document.addEventListener('mouseup', this.onMouseUp.bind(this));
+    this.element.addEventListener('mouseup', this.onMouseUp.bind(this));
   }
 
   onMouseDown(e) {

@@ -21,7 +21,6 @@ class DraggableElement
 
     this.draggable.addEventListener('mouseMove', (data) => {
 
-
       if(!this.element.getAllChildren().length && ! this.element.manualZ) {
         const zIndex = parseInt(this.element.getDom().style.top);
         this.element.getDom().style.zIndex = zIndex + this.element.height();
@@ -48,6 +47,11 @@ class DraggableElement
       this.element.y(
         parseInt(this.element.getDom().style.top)
       );
+
+      this.handle('mouseUp', {
+        element: element
+      });
+
     });
   }
 

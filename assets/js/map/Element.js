@@ -232,6 +232,10 @@ class Element
   }
 
 
+  getParent() {
+    return this.parent;
+  }
+
 
   update2() {
     if(this.needUpdate()) {
@@ -609,9 +613,6 @@ class Element
   renderCollisionZones() {
     return this.renderer.renderCollisionZones();
   }
-
-
-
 }
 
 

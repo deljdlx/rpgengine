@@ -1,21 +1,38 @@
-[{
-    "name": "house-00",
-    "x": 10,
-    "y": 0,
-    "element": "House01"
-}, {
-    "name": "fountain-00",
-    "x": 200,
-    "y": 360,
-    "element": "Fountain00"
-}, {
-    "name": "woman-00",
-    "x": 50,
-    "y": 210,
-    "element": "Woman00"
-}, {
-    "name": "fence-group-00",
-    "x": 250,
-    "y": 0,
-    "element": "FenceGroup00"
-}]
+[
+    {
+        "name": "house-00",
+        "x": 10,
+        "y": 0,
+        "element": "House01"
+    },
+    {
+        "name": "fountain-00",
+        "x": 654,
+        "y": 285,
+        "element": "Fountain00"
+    },
+    {
+        "name": "woman-00",
+        "x": 119,
+        "y": 471,
+        "element": "Woman00"
+    },
+    {
+        "name": "fence-group-00",
+        "x": 496,
+        "y": 22,
+        "element": "FenceGroup00"
+    },
+    {
+        "name": "foobar",
+        "x": 610,
+        "y": 382,
+        "element": "Tree00"
+    },
+    {
+        "name": "c9d2c133-0009-7a8e-46a6-e7c806e37b89",
+        "x": 379,
+        "y": 296,
+        "element": "Tree00"
+    }
+]

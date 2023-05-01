@@ -40,6 +40,13 @@ class Area extends Element
     })
   }
 
+  getCoordX() {
+    return this.mapX;
+  }
+
+  getCoordY() {
+    return this.mapY;
+  }
 
   /**
    * @returns {Board}
