@@ -13,8 +13,8 @@
     },
     {
         "name": "woman-00",
-        "x": 119,
-        "y": 471,
+        "x": 177,
+        "y": 304,
         "element": "Woman00"
     },
     {
@@ -24,15 +24,135 @@
         "element": "FenceGroup00"
     },
     {
-        "name": "foobar",
-        "x": 610,
-        "y": 382,
+        "name": "25605889-c8fe-e644-3888-5d39706b3812",
+        "x": 421,
+        "y": 457,
+        "element": "House01"
+    },
+    {
+        "name": "78905488-e937-729c-f038-a9de894c8d74",
+        "x": 96,
+        "y": 427,
         "element": "Tree00"
     },
     {
-        "name": "c9d2c133-0009-7a8e-46a6-e7c806e37b89",
-        "x": 379,
-        "y": 296,
+        "name": "31393e8a-cf70-cf6a-2fd1-dbdc56ee4c3f",
+        "x": 202,
+        "y": 561,
+        "element": "Tree00"
+    },
+    {
+        "name": "fc491201-6a6d-cc8e-82b8-df95fe2a43c0",
+        "x": 305,
+        "y": 710,
+        "element": "Tree00"
+    },
+    {
+        "name": "c6938a6f-d07b-342c-7220-1f5aa2a8a571",
+        "x": 303,
+        "y": 475,
+        "element": "Sunflower00"
+    },
+    {
+        "name": "c190eff2-f5d8-06d4-18ad-14abd2b9da36",
+        "x": 497,
+        "y": 319,
+        "element": "Sunflower00"
+    },
+    {
+        "name": "d11b91c8-ab8a-8e9c-2239-f0d80b531d45",
+        "x": 111,
+        "y": 731,
+        "element": "Sunflower00"
+    },
+    {
+        "name": "8127f25c-4e2e-0d30-ed4e-36fb75e57921",
+        "x": 648,
+        "y": 761,
+        "element": "Sunflower00"
+    },
+    {
+        "name": "10fa2973-6e70-c6a0-0760-38ec219931be",
+        "x": 39,
+        "y": 609,
+        "element": "House00"
+    },
+    {
+        "name": "bfe5c3e9-7670-3473-3950-558aae27d8e0",
+        "x": 31,
+        "y": 538,
+        "element": "Tree00"
+    },
+    {
+        "name": "91d2e293-5cf8-9e84-34a1-32d4245e4d94",
+        "x": 94,
+        "y": 557,
+        "element": "Tree00"
+    },
+    {
+        "name": "651d940c-8933-589a-8ed7-4540adbf2a9b",
+        "x": 161,
+        "y": 614,
+        "element": "Tree00"
+    },
+    {
+        "name": "941e9312-9426-3dd6-01db-186a3d3819e8",
+        "x": 167,
+        "y": 695,
+        "element": "Tree00"
+    },
+    {
+        "name": "1f1dbb92-2d3f-99d5-8bdb-3b424f45f9e7",
+        "x": 5,
+        "y": 726,
+        "element": "Tree00"
+    },
+    {
+        "name": "12561053-5364-e5f3-7c4a-7e111edb2bcc",
+        "x": 75,
+        "y": 738,
+        "element": "Tree00"
+    },
+    {
+        "name": "7b81c23e-caf9-0599-9580-cd84d538bf17",
+        "x": 143,
+        "y": 491,
+        "element": "Tree00"
+    },
+    {
+        "name": "5b6c9750-6b99-caab-ad43-67835f8daba6",
+        "x": 36,
+        "y": 463,
+        "element": "Tree00"
+    },
+    {
+        "name": "5a2cc8f1-af0a-eaa8-1b4c-6a00cd358959",
+        "x": 148,
+        "y": 761,
+        "element": "Flower00"
+    },
+    {
+        "name": "1bff8ec0-d866-3fe1-c1dc-98eedabbc41c",
+        "x": 158,
+        "y": 561,
+        "element": "Flower00"
+    },
+    {
+        "name": "499a6fe4-040d-ce3b-db47-a112dbf5b611",
+        "x": 103,
+        "y": 529,
+        "element": "Flower00"
+    },
+    {
+        "name": "42baf551-b2d9-4075-4dfe-282d81cacd70",
+        "x": 5,
+        "y": 627,
+        "element": "Flower00"
+    },
+    {
+        "name": "fa9bec25-83ea-16ec-05c6-5cdb88563b75",
+        "x": 682,
+        "y": 625,
         "element": "Tree00"
     }
 ]

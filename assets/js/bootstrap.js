@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   application.registerElement('Fountain00', Fountain00);
   application.registerElement('Woman00', Woman00);
   application.registerElement('Flower00', Flower00);
+  application.registerElement('Tree00', Flower00);
+  application.registerElement('Sunflower00', Sunflower00);
+  application.registerElement('Ground00', Ground00);
+
 
 
   const gameConsole = new GameConsole(application, '#game-console');

@@ -6,11 +6,29 @@ class BoundingBox
    */
   _element;
 
+  /**
+   * @type {number}
+   */
   _x0 = null;
+
+  /**
+   * @type {number}
+   */
   _x1 = null;
+
+  /**
+   * @type {number}
+   */
   _y0 = null;
+
+  /**
+   * @type {number}
+   */
   _y1 = null;
 
+  /**
+   * @type {boolean}
+   */
   _collided = false;
 
   /**
@@ -26,6 +44,10 @@ class BoundingBox
     }
   }
 
+  /**
+   * @param {boolean} value
+   * @returns {boolean}
+   */
   collided(value = null) {
     if(value !== null) {
       this._collided = value;
@@ -68,7 +90,7 @@ class BoundingBox
       (parentElement.getCollisionBoundingBox().x1() <
       childElement.getCollisionBoundingBox().x1() + childElement.x()
       || parentElement.getCollisionBoundingBox().x1() === null)
-      && childElement.getCollisionBoundingBox().x1() !== null 
+      && childElement.getCollisionBoundingBox().x1() !== null
     ) {
       parentElement.getCollisionBoundingBox().x1(
         childElement.getCollisionBoundingBox().x1() + childElement.x()
@@ -111,7 +133,6 @@ class BoundingBox
 
   // ===========================
   /**
-   * 
    * @param {BoudingBox} boudingBox
    */
   isCollided(boundingBox) {
@@ -127,12 +148,18 @@ class BoundingBox
     );
   }
 
+  /**
+   * @returns {boolean}
+   */
   isUndefined() {
     return this._x0 === null || this._x1 === null || this._y0 === null || this._y1 === null;
   }
 
   // ===========================
 
+  /**
+   * @returns {{x0: number, x1: number, y0: number, y1: number}}
+   */
   offsets() {
     return {
       x0: this.offsetX0(),

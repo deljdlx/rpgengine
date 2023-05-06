@@ -49,6 +49,10 @@ class Application
   }
 
   instanciate(name) {
+    if(typeof(this._elementsClasses[name]) === 'undefined') {
+      console.error('Element with name ' + name + ' does no exists');
+      return false;
+    }
     return new this._elementsClasses[name];
   }
 

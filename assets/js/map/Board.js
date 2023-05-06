@@ -36,12 +36,16 @@ class Board extends Element
       return this._application.fetchArea(x, y).then(data => {
         data.forEach(descriptor => {
 
-          area.addElement(
-            descriptor.x,
-            descriptor.y,
-            this._application.instanciate(descriptor.element),
-            descriptor.name,
-          );
+          const element = this._application.instanciate(descriptor.element);
+
+          if(element !== false) {
+            area.addElement(
+              descriptor.x,
+              descriptor.y,
+              element,
+              descriptor.name,
+            );
+          }
         });
         callback(area);
         return area;

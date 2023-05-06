@@ -19,14 +19,14 @@ $areaData = $data['data'];
 // JDLX_TODO
 $file = __DIR__.'/areas/'.$x.'_'.$y.'.json';
 
-if(is_file($file)) {
+// if(is_file($file)) {
     file_put_contents(
         $file,
         json_encode($areaData, JSON_PRETTY_PRINT)
     );
     echo json_encode($data);
     return;
-}
+// }
 
 echo '[]';
 return;

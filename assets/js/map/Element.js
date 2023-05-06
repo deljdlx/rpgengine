@@ -350,8 +350,6 @@ class Element
     zone.width(width);
     zone.height(height);
 
-
-    // this.collisionZones.push(zone);
     this.collisionZones[type].push(zone);
 
     this.collisionBoundingBox.updateWithBoundingBox(zone);
@@ -378,8 +376,10 @@ class Element
     }
   }
 
+  /**
+   * @param {Element}
+   */
   updateBoudingBox(element) {
-
     const boundingBox = new BoundingBox();
     boundingBox.x0(element.x());
     boundingBox.y0(element.y());
@@ -387,15 +387,10 @@ class Element
     boundingBox.x1(element.x() + element.getBoundingBox().width());
     boundingBox.y1(element.y() + element.getBoundingBox().height());
 
-    // console.log('%cElement.js :: 383 =============================', 'color: #f00; font-size: 1rem');
-    // console.log(boundingBox);
-
     this.boundingBox.updateWithBoundingBox(boundingBox);
     if(this.parent) {
       this.parent.updateBoudingBox(this);
     }
-
-
   }
 
   // ===========================
@@ -593,9 +588,6 @@ class Element
     return this.rendered;
   }
 
-  /**
-   * @returns
-   */
   render() {
     this.rendered = true;
     // this.renderBoundingBox();

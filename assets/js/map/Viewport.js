@@ -1,13 +1,29 @@
 class Viewport
 {
 
+  /**
+   * @type {Application}
+   */
   _application;
 
+  /**
+   * @type {number}
+   */
   direction;
+
+  /**
+   * @type {number}
+   */
   moving = 0;
 
-
+  /**
+   * @type {number}
+   */
   interval = 4;
+
+  /**
+   * @type {number}
+   */
   _timestamp;
 
 
@@ -45,6 +61,12 @@ class Viewport
   _listeners = {};
 
 
+  /**
+   * @param {Application} application
+   * @param {DomElement} container
+   * @param {number} width
+   * @param {number} height
+   */
   constructor(application, container, width = 500, height = 500)
   {
     this._application = application;
@@ -67,7 +89,6 @@ class Viewport
   }
 
   // ===========================
-
   addEventListener(name, callback) {
     if(typeof(this._listeners[name]) === 'undefined') {
       this._listeners[name] = [];
@@ -89,22 +110,37 @@ class Viewport
 
   // ===========================
 
+  /**
+   * @returns {Application}
+   */
   getApplication() {
     return this._application;
   }
 
+  /**
+   * @returns {Character}
+   */
   getCharacter(){
     return this.character;
   }
 
+  /**
+   * @returns {Board}
+   */
   getBoard() {
     return this.board;
   }
 
+  /**
+   * @returns {DomElement}
+   */
   getContainer() {
     return this.container;
   }
 
+  /**
+   * @returns {{x: number, y: number}}
+   */
   getCurrentAreaCoordinates() {
     const x = Math.floor(this.character.x() / this.board.width());
     const y = Math.floor((this.character.y() + 48) / this.board.height());
@@ -114,11 +150,17 @@ class Viewport
     };
   }
 
+  /**
+   * @returns {Area}
+   */
   getCurrentArea() {
     const at = this.getCurrentAreaCoordinates();
     return this.board.getAreaAt(at.x, at.y)
   }
 
+  /**
+   * @returns {Boolean}
+   */
   currentAreaExists() {
     const at = this.getCurrentAreaCoordinates();
     return this.board.areaExistsAt(at.x, at.y);
@@ -139,7 +181,7 @@ class Viewport
     this.board.loadArea(at.x, at.y - 1);
   }
 
-  freeAreasFromCurrentPosision() {
+  freeAreasFromCurrentPosision(radius = 2) {
     const at = this.getCurrentAreaCoordinates();
 
     this.board.freeArea(at.x - 2, at.y - 2);
@@ -161,6 +203,7 @@ class Viewport
     this.board.freeArea(at.x - 1, at.y - 2);
     this.board.freeArea(at.x, at.y - 2);
     this.board.freeArea(at.x + 1, at.y - 2);
+
   }
 
   // ===========================
@@ -305,5 +348,4 @@ class Viewport
   height(value = null) {
     return this.geometry.height(value);
   }
-
 }
