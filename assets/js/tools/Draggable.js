@@ -19,6 +19,13 @@ class Draggable {
     this.element.addEventListener('mousedown', this.onMouseDown.bind(this));
     document.addEventListener('mousemove', this.onMouseMove.bind(this));
     this.element.addEventListener('mouseup', this.onMouseUp.bind(this));
+
+    this.element.addEventListener('contextmenu', this.onContextMenu.bind(this));
+  }
+
+  onContextMenu(e) {
+    console.log("contextmenu");
+    this.handle('contextmenu', e);
   }
 
   onMouseDown(e) {

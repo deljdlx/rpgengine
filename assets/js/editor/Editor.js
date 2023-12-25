@@ -26,6 +26,8 @@ class Editor
 
   initializeSpritePanel() {
     this.application.getRegisteredElements().forEach(elementName => {
+      console.log('%cEditor.js :: 29 =============================', 'color: #f00; font-size: 1rem');
+      console.log(elementName);
       this.registerSprite(elementName);
     });
   }
@@ -85,6 +87,7 @@ class Editor
       const area = event.area;
       this.currentArea = area;
 
+
       const sprite = this.application.instanciate(this.selectedSprite);
 
       const x = event.areaX - sprite.width() / 2;
@@ -123,16 +126,24 @@ class Editor
   }
 
   makeElementEditable(element) {
+
     const draggable = new DraggableElement(element);
     draggable.addEventListener('mouseUp', data => {
       console.log('%cEditor.js :: 106 =============================', 'color: #f00; font-size: 1rem');
       // console.log(data);
       console.log(element.getParent());
-
-
-
       this.saveArea(element.getParent());
     });
+
+    draggable.addEventListener('contextmenu', (data) => {
+      console.log('%cEditor.js :: 128 =============================', 'color: #f0f; font-size: 1rem');
+      console.log("contextmenu");
+      console.log(data);
+      data.event.preventDefault();
+      data.element.destroy();
+      this.saveArea(element.getParent());
+    });
+
   }
 
   async saveArea(area) {

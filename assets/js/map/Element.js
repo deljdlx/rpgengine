@@ -106,9 +106,26 @@ class Element
     this.height(height);
 
     this.boundingBox = new BoundingBox(this);
-
-
   }
+
+  destroy() {
+    if(this.parent) {
+      this.parent.removeChild(this);
+    }
+    this.getRenderer().clear();
+  }
+
+  removeChild(element) {
+    this.children = this.children.filter(child => child !== element);
+    this.childrenByName = Object.keys(this.childrenByName).reduce((accumulator, name) => {
+      if(this.childrenByName[name] !== element) {
+        accumulator[name] = this.childrenByName[name];
+      }
+      return accumulator;
+    }, {});
+  }
+
+
 
   setRenderer(renderer) {
     this.renderer = renderer;

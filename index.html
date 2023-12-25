@@ -18,8 +18,6 @@
     <link rel="stylesheet" href="assets/css/layout.css">
     <link rel="stylesheet" href="assets/css/map.css">
 
-    <link rel="stylesheet" href="assets/css/editor.css">
-
     <!--
     <link rel="stylesheet" href="assets/css/layout.css">
     <link rel="stylesheet" href="assets/css/map-debug.css">
@@ -30,7 +28,7 @@
 </head>
 <body>
 
-    <div id="editor-layout" style="display: flex; flex-direction:column">
+    <div id="layout" style="display: flex; flex-direction:column">
         <div>
             HEADER
         </div>
@@ -40,9 +38,9 @@
 
                 </div>
             </div>
-            <div id="viewport" class="frame-00"></div>
+            <div id="viewport" class="frame-00" style="width: 900px; height: 900px"></div>
         </div>
-        <div class="frame-00" style="position: relative; display: flex" id="sprite-panel"></div>
+        <div class="frame-00">FOOTER</div>
     </div>
 
 
@@ -89,9 +87,9 @@
     <script src="assets/js/map/Renderer/CharacterRenderer.js"></script>
 
     <script src="assets/js/map/Character.js"></script>
+
     <script src="assets/js/map/Elements/CharacterBases/Woman00.js"></script>
     <script src="assets/js/map/Elements/CharacterBases/Man00.js"></script>
-
 
     <script src="assets/js/map/Elements/House00.js"></script>
     <script src="assets/js/map/Elements/House01.js"></script>
@@ -113,12 +111,7 @@
 
     <script src="assets/js/tools/GameConsole.js"></script>
 
-
-    <script src="assets/js/tools/Draggable.js"></script>
-    <script src="assets/js/editor/DraggableElement.js"></script>
-    <script src="assets/js/editor/Editor.js"></script>
-
-    <script src="assets/js/editor-bootstrap.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
 
 
 

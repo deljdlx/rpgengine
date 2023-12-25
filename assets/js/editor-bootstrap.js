@@ -16,7 +16,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   application.registerElement('House00', House00);
   application.registerElement('House01', House01);
   application.registerElement('Fountain00', Fountain00);
+
   application.registerElement('Woman00', Woman00);
+  application.registerElement('Man00', Man00);
+
   application.registerElement('Flower00', Flower00);
   application.registerElement('Tree00', Tree00);
   application.registerElement('Sunflower00', Sunflower00);
